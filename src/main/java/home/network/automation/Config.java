@@ -36,7 +36,7 @@ public class Config {
             .addDevice(new BroadlinkHub("Broadlink RM-PRO", "RMPRO", rmProMac, broadlinkBridge))
             .addDevice(new HarmonyHub("Logitech Harmony Elite", "Harmony", harmonyAddress, 100))
             .addDevice(new AudioDevice("Hegel Amp", "H80", 30, true)
-                                .setPrefferredRemote(house.getRemoteControlDevice("RMPRO"))
+                                //.setPrefferredRemote(house.getRemoteControlDevice("RMPRO"))
                                 .addButton(new Button(1, "VolumeUp", "Volume Up").mapsTo(Button.Mapping.VOLUME_UP))
                                 .addButton(new Button(2, "VolumeDown", "Volume Down").mapsTo(Button.Mapping.VOLUME_DOWN)))
             .addDevice(new RemoteControlledDevice("Electric curtain for Living room", "curtain", true)

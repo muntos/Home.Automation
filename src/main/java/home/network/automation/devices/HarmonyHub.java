@@ -32,10 +32,14 @@ public class HarmonyHub extends RemoteControlDevice{
     }
 
     private void connect(){
-        Injector injector = Guice.createInjector(new HarmonyClientModule());
-        injector.injectMembers(this);
-        harmonyClient.connect(address);
-        log.info("Connected to Harmony Hub {}", address);
+        try {
+            Injector injector = Guice.createInjector(new HarmonyClientModule());
+            injector.injectMembers(this);
+            harmonyClient.connect(address);
+            log.info("Connected to Harmony Hub {}", address);
+        } catch (RuntimeException ex){
+            log.warn("Failed connecting to Harmony Hub {} error is: {}", address, ex.getMessage());
+        }
     }
 
     @Override
