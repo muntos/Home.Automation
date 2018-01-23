@@ -22,9 +22,9 @@ public class DeviceController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("press/{device}/{command}")
-    public CommandResult pressRemoteButton(@PathParam("device") String deviceName, @PathParam("command") String commandName) {
-        return commandsService.pressRemoteButton(deviceName, commandName);
+    @Path("press/{device}/{button}")
+    public CommandResult pressRemoteButton(@PathParam("device") String deviceName, @PathParam("button") String buttonName) {
+        return commandsService.pressRemoteButton(deviceName, buttonName);
     }
 
     @GET

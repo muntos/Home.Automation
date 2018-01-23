@@ -1,5 +1,6 @@
 package home.network.automation.devices;
 
+import home.network.automation.model.CommandResult;
 import home.network.automation.model.SmartPlugResponse;
 import home.network.automation.model.SmartPlugStatus;
 import lombok.extern.slf4j.Slf4j;
@@ -66,4 +67,5 @@ public class SmartPlug extends Device {
         this.status = status;
         return status;
     }
+
 }
