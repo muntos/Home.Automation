@@ -64,4 +64,27 @@ public class BroadlinkBridge {
 
         return entity;
     }
+
+    public <T extends BroadlinkBridgeResponse> T setStatus(Map<String, String> values, String name, String macAddress, Class<T> type){
+        log.info("Set '{}' (MAC = {}) status to '{}'...",name, macAddress, values);
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("deviceMac", macAddress);
+        queryParams.putAll(values);
+        String url = buildURI("send", queryParams).toUriString();
+        T entity = null;
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<T> response = restTemplate
+                    .getForEntity(url, type);
+            entity = response.getBody();
+            if (!entity.getStatus().equals(SmartPlugResponse.status.ok)){
+                log.error("Set '{}' (MAC = {}) status returned: {}", name, macAddress, entity.getMsg());
+            }
+        }catch (RestClientException ex){
+            log.error("Set '{}' (MAC = {}) status returned exception: {}", name, macAddress, ex.getMessage());
+        }
+
+        return entity;
+    }
 }

@@ -1,6 +1,7 @@
 package home.network.automation.tasks;
 
 import home.network.automation.devices.SmartPlug;
+import home.network.automation.model.SmartPlugStatus;
 import home.network.automation.observer.House;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,11 @@ public class ScheduledTasks {
     @Scheduled(fixedDelay = 10000)
     public void checkHarmonyActivity() {
         SmartPlug smartPlug = house.getSmartPlugDevice("SP3_H80");
+        if (smartPlug.getStatus() == SmartPlugStatus.ON) {
+            smartPlug.setStatus(false);
+        } else {
+            smartPlug.setStatus(true);
+        }
 
         log.info("Device '{}' has status {}", smartPlug.getName(), smartPlug.getStatus());
        //sp3Status = rmBridge.getSP3Status();
