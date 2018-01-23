@@ -1,9 +1,6 @@
 package home.network.automation.observer;
 
-import home.network.automation.devices.AudioDevice;
-import home.network.automation.devices.Device;
-import home.network.automation.devices.RemoteControlDevice;
-import home.network.automation.devices.RemoteControlledDevice;
+import home.network.automation.devices.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -50,6 +47,24 @@ public class House {
                 .orElse(null);
     }
 
+ /*   public <T extends Device> T getDevice(String deviceName, Class<T> type){
+        return getDevices().stream()
+                .filter(x -> x instanceof type)
+                .map(x -> (type) x)
+                .filter(x -> x.getShortName().equalsIgnoreCase(deviceName) || x.getName().equalsIgnoreCase(deviceName))
+                .findFirst()
+                .orElse(null);
+    }*/
+
+    public SmartPlug getSmartPlugDevice(String deviceName){
+        return  devices.stream()
+                .filter(x -> x instanceof SmartPlug)
+                .map(x -> (SmartPlug) x)
+                .filter(x -> x.getName().equalsIgnoreCase(deviceName) || x.getShortName().equalsIgnoreCase(deviceName))
+                .findFirst()
+                .orElse(null);
+    }
+
     public RemoteControlledDevice getRemoteControlledDevice(String deviceName){
         return getRemoteControlledDevices()
                 .stream()
@@ -58,7 +73,7 @@ public class House {
                 .orElse(null);
     }
 
-    public AudioDevice getAudioDeviceConnectToLogitechMediaServer(){
+    public AudioDevice getAudioDeviceConnectedToLogitechMediaServer(){
         return devices.stream()
                 .filter(x -> x instanceof  AudioDevice)
                 .map(x -> (AudioDevice) x)

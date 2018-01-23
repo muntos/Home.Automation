@@ -1,7 +1,6 @@
 package home.network.automation.service;
 
 import home.network.automation.devices.AudioDevice;
-import home.network.automation.devices.Device;
 import home.network.automation.devices.RemoteControlDevice;
 import home.network.automation.devices.RemoteControlledDevice;
 import home.network.automation.model.Button;
@@ -9,7 +8,6 @@ import home.network.automation.model.CommandResult;
 import home.network.automation.observer.House;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -53,7 +51,7 @@ public class CommandsServiceImpl implements CommandsService {
         log.info("Received volume change request from Logitech Media Server with value {}", value);
         int volume = Integer.valueOf(value);
         CommandResult commandResult = new CommandResult(false, "unknown");
-        AudioDevice audioAmplifier = house.getAudioDeviceConnectToLogitechMediaServer();
+        AudioDevice audioAmplifier = house.getAudioDeviceConnectedToLogitechMediaServer();
         if (audioAmplifier == null) {
             log.error("Could not find any audio device connected to Logitech Media Server!");
             return new CommandResult(false, "Could not find any audio device connected to Logitech Media Server!");

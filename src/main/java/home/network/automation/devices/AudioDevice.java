@@ -1,6 +1,5 @@
 package home.network.automation.devices;
 
-import home.network.automation.model.Button;
 import lombok.Getter;
 import lombok.Setter;
 
