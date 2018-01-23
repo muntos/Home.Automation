@@ -38,7 +38,7 @@ public class Config {
             .addDevice(new AudioDevice("Hegel Amp", "H80", 30, true)
                                 .setPrefferredRemote(house.getRemoteControlDevice("RMPRO"))
                                 .addButton(new Button(1, "VolumeUp", "Volume Up").mapsTo(Button.Mapping.VOLUME_UP))
-                                .addButton(new Button(2, "VolumeDown", "Volume Down")))
+                                .addButton(new Button(2, "VolumeDown", "Volume Down").mapsTo(Button.Mapping.VOLUME_DOWN)))
             .addDevice(new RemoteControlledDevice("Electric curtain for Living room", "curtain", true)
                                 .addButton(new Button(3, "close", "Curtain close"))
                                 .addButton(new Button(4, "open", "Curtain open")))

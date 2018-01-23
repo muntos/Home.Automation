@@ -1,17 +1,26 @@
 package home.network.automation.devices;
 
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import home.network.automation.model.Button;
 import home.network.automation.model.CommandResult;
 import lombok.extern.slf4j.Slf4j;
+import net.whistlingfish.harmony.HarmonyClient;
+import net.whistlingfish.harmony.HarmonyClientModule;
 
 @Slf4j
 public class HarmonyHub extends RemoteControlDevice{
+    @Inject
+    private HarmonyClient harmonyClient;
+
     private String address;
 
     public HarmonyHub(String name, String shortName, String address) {
         super(name, shortName);
         this.address = address;
         canSendIR = true;
+        connect();
     }
 
     public HarmonyHub(String name, String shortName, String address, Integer priority) {
@@ -19,11 +28,25 @@ public class HarmonyHub extends RemoteControlDevice{
         this.address = address;
         canSendIR = true;
         setPriority(priority);
+        connect();
+    }
+
+    private void connect(){
+        Injector injector = Guice.createInjector(new HarmonyClientModule());
+        injector.injectMembers(this);
+        harmonyClient.connect(address);
+        log.info("Connected to Harmony Hub {}", address);
     }
 
     @Override
     public CommandResult pressButtonUsingInfrared(String deviceName, Button button) {
         log.info("'{}' received Infrared ==> {} : {}", name, deviceName, button.getButtonName());
+        try {
+            harmonyClient.pressButton(deviceName, button.getButtonName());
+        } catch (Exception ex){
+            log.error("Error: {}", ex.getMessage());
+            return new CommandResult(false, ex.getMessage());
+        }
         return new CommandResult(true, "success");
     }
 
