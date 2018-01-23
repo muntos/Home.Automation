@@ -1,5 +1,6 @@
 package home.network.automation.observer;
 
+import home.network.automation.devices.AudioDevice;
 import home.network.automation.devices.Device;
 import home.network.automation.devices.RemoteControlDevice;
 import home.network.automation.devices.RemoteControlledDevice;
@@ -31,7 +32,7 @@ public class House {
     public List<RemoteControlledDevice> getRemoteControlledDevices(){
         return devices.stream()
                 .filter(x -> x instanceof RemoteControlledDevice)
-                .map( x -> (RemoteControlledDevice) x)
+                .map(x -> (RemoteControlledDevice) x)
                 .collect(Collectors.toList());
     }
 
@@ -53,6 +54,15 @@ public class House {
         return getRemoteControlledDevices()
                 .stream()
                 .filter(x -> x.getName().equalsIgnoreCase(deviceName) || x.getShortName().equalsIgnoreCase(deviceName))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public AudioDevice getAudioDeviceConnectToLogitechMediaServer(){
+        return devices.stream()
+                .filter(x -> x instanceof  AudioDevice)
+                .map(x -> (AudioDevice) x)
+                .filter(x -> x.getIsConnectedToLogitechMediaServer())
                 .findFirst()
                 .orElse(null);
     }

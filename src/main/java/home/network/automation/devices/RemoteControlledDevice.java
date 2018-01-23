@@ -46,4 +46,11 @@ public class RemoteControlledDevice extends Device{
                 .orElse(null);
     }
 
+    public Button getButton(Button.Mapping mapping){
+        return buttons.stream()
+                .filter(x -> x.getMapping().equals(mapping))
+                .findFirst()
+                .orElse(null);
+    }
+
 }

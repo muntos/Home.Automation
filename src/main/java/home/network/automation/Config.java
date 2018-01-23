@@ -27,7 +27,6 @@ public class Config {
     @Value("${logitech.harmony.address}")
     private String harmonyAddress;
 
-
     @Bean
     House house(){
         BroadlinkBridge broadlinkBridge = new BroadlinkBridge(rmBridgeProtocol, rmBridgeAddress, rmBridgePort);
@@ -36,9 +35,9 @@ public class Config {
             .addDevice(new SmartPlug("Broadlink SP3 connected to Hegel H80 amplifier","SP3_H80", sp3forH80Mac, broadlinkBridge))
             .addDevice(new BroadlinkHub("Broadlink RM-PRO", "RMPRO", rmProMac, broadlinkBridge))
             .addDevice(new HarmonyHub("Logitech Harmony Elite", "Harmony", harmonyAddress, 100))
-            .addDevice(new RemoteControlledDevice("Hegel H80", "H80")
+            .addDevice(new AudioDevice("Hegel Amp", "H80", 30, true)
                                 .setPrefferredRemote(house.getRemoteControlDevice("RMPRO"))
-                                .addButton(new Button(1, "VolumeUp", "Volume Up"))
+                                .addButton(new Button(1, "VolumeUp", "Volume Up").mapsTo(Button.Mapping.VOLUME_UP))
                                 .addButton(new Button(2, "VolumeDown", "Volume Down")))
             .addDevice(new RemoteControlledDevice("Electric curtain for Living room", "curtain", true)
                                 .addButton(new Button(3, "close", "Curtain close"))

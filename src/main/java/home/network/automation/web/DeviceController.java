@@ -3,35 +3,26 @@ package home.network.automation.web;
 import home.network.automation.model.CommandResult;
 import home.network.automation.service.CommandsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.awt.*;
 
-@XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "commands")
-@Path("/commands")
+@RestController
+@RequestMapping("/commands")
 public class DeviceController {
     @Autowired
     private CommandsService commandsService;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("press/{device}/{button}")
-    public CommandResult pressRemoteButton(@PathParam("device") String deviceName, @PathParam("button") String buttonName) {
+    @RequestMapping(value = "/press/{device}/{button}", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
+    public CommandResult pressRemoteButton(@PathVariable("device") String deviceName, @PathVariable("button") String buttonName) {
         return commandsService.pressRemoteButton(deviceName, buttonName);
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/lms/volume/{volumeValue}")
-    public CommandResult changeLMSvolume(@PathParam("volumeValue") String value){
-        //return commandsService.changeLMSvolume(value);
-        return null;
+    @GetMapping("/lms/volume/{volumeValue}")
+    public CommandResult changeLMSvolume(@PathVariable("volumeValue") String value){
+        return commandsService.changedLogitechMediaServerVolume(value);
     }
 }

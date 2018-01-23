@@ -1,5 +1,7 @@
 package home.network.automation.service;
 
+import home.network.automation.devices.AudioDevice;
+import home.network.automation.devices.Device;
 import home.network.automation.devices.RemoteControlDevice;
 import home.network.automation.devices.RemoteControlledDevice;
 import home.network.automation.model.Button;
@@ -7,16 +9,14 @@ import home.network.automation.model.CommandResult;
 import home.network.automation.observer.House;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Slf4j
 @Service
 public class CommandsServiceImpl implements CommandsService {
     @Autowired
-    House house;
-
+    private House house;
 
     @Override
     public CommandResult pressRemoteButton(String deviceName, String buttonName) {
@@ -46,6 +46,38 @@ public class CommandsServiceImpl implements CommandsService {
            return remote.pressButtonUsingInfrared(deviceName, button);
        }
 
+    }
+
+    @Override
+    public CommandResult changedLogitechMediaServerVolume(String value) {
+        log.info("Received volume change request from Logitech Media Server with value {}", value);
+        int volume = Integer.valueOf(value);
+        CommandResult commandResult = new CommandResult(false, "unknown");
+        AudioDevice audioAmplifier = house.getAudioDeviceConnectToLogitechMediaServer();
+        if (audioAmplifier == null) {
+            log.error("Could not find any audio device connected to Logitech Media Server!");
+            return new CommandResult(false, "Could not find any audio device connected to Logitech Media Server!");
+        }
+
+        Button volumeUp = audioAmplifier.getButton(Button.Mapping.VOLUME_UP);
+        Button volumeDown = audioAmplifier.getButton(Button.Mapping.VOLUME_DOWN);
+        if (volumeUp == null || volumeDown == null){
+            log.error("Could not find mapping for volumeUp or volumeDown for device '{}', check configuration!", audioAmplifier.getName());
+            return new CommandResult(false, String.format("Could not find mapping for volumeUp or volumeDown for device '%s', check configuration!", audioAmplifier.getName()));
+        }
+
+        if (volume > audioAmplifier.getCurrentVolume() || volume == 100) {
+            commandResult = pressRemoteButton(audioAmplifier.getName(), volumeUp.getButtonName());
+        }
+        else if (volume < audioAmplifier.getCurrentVolume() || volume == 0){
+            commandResult = pressRemoteButton(audioAmplifier.getName(), volumeDown.getButtonName());
+        }
+
+        if (commandResult.getSuccess()) {
+            audioAmplifier.setCurrentVolume(volume);
+        }
+
+        return commandResult;
     }
 
 }
