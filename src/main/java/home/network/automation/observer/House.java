@@ -26,13 +26,6 @@ public class House {
                 .collect(Collectors.toList());
     }
 
-    public List<RemoteControlledDevice> getRemoteControlledDevices(){
-        return devices.stream()
-                .filter(x -> x instanceof RemoteControlledDevice)
-                .map(x -> (RemoteControlledDevice) x)
-                .collect(Collectors.toList());
-    }
-
     public RemoteControlDevice getPreferredRemoteControlDevice(Boolean receiveRF){
         return getRemoteControlDevices().stream()
                 .filter(x -> x.getCanSendRF() == receiveRF)
@@ -40,42 +33,18 @@ public class House {
                 .orElse(null);
     }
 
-    public RemoteControlDevice getRemoteControlDevice(String name){
-        return getRemoteControlDevices().stream()
-                .filter(x -> x.getShortName().equalsIgnoreCase(name))
-                .findFirst()
-                .orElse(null);
-    }
-
- /*   public <T extends Device> T getDevice(String deviceName, Class<T> type){
+    public <T extends Device> T getDevice(String deviceName){
         return getDevices().stream()
-                .filter(x -> x instanceof type)
-                .map(x -> (type) x)
+                //.filter(x -> x.getClass().isInstance(type))
+                .map(x -> (T) x)
                 .filter(x -> x.getShortName().equalsIgnoreCase(deviceName) || x.getName().equalsIgnoreCase(deviceName))
-                .findFirst()
-                .orElse(null);
-    }*/
-
-    public SmartPlug getSmartPlugDevice(String deviceName){
-        return  devices.stream()
-                .filter(x -> x instanceof SmartPlug)
-                .map(x -> (SmartPlug) x)
-                .filter(x -> x.getName().equalsIgnoreCase(deviceName) || x.getShortName().equalsIgnoreCase(deviceName))
-                .findFirst()
-                .orElse(null);
-    }
-
-    public RemoteControlledDevice getRemoteControlledDevice(String deviceName){
-        return getRemoteControlledDevices()
-                .stream()
-                .filter(x -> x.getName().equalsIgnoreCase(deviceName) || x.getShortName().equalsIgnoreCase(deviceName))
                 .findFirst()
                 .orElse(null);
     }
 
     public AudioDevice getAudioDeviceConnectedToLogitechMediaServer(){
         return devices.stream()
-                .filter(x -> x instanceof  AudioDevice)
+                .filter(x -> x instanceof AudioDevice)
                 .map(x -> (AudioDevice) x)
                 .filter(x -> x.getIsConnectedToLogitechMediaServer())
                 .findFirst()

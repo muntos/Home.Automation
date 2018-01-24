@@ -17,16 +17,15 @@ public class ScheduledTasks {
 
     @Scheduled(fixedDelay = 10000)
     public void checkHarmonyActivity() {
-        SmartPlug smartPlug = house.getSmartPlugDevice("SP3_H80");
-        if (smartPlug.getStatus() == SmartPlugStatus.ON) {
+        SmartPlug smartPlug = house.getDevice("SP3_H80");
+
+     /*   if (smartPlug.getStatus() == SmartPlugStatus.ON) {
             smartPlug.setStatus(false);
         } else {
             smartPlug.setStatus(true);
         }
-
+*/
         log.info("Device '{}' has status {}", smartPlug.getName(), smartPlug.getStatus());
-       //sp3Status = rmBridge.getSP3Status();
-
     }
 
 }

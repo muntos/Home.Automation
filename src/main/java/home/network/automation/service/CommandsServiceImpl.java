@@ -18,10 +18,10 @@ public class CommandsServiceImpl implements CommandsService {
 
     @Override
     public CommandResult pressRemoteButton(String deviceName, String buttonName) {
-        RemoteControlledDevice device = house.getRemoteControlledDevice(deviceName);
+        RemoteControlledDevice device = house.getDevice(deviceName);
         if (device == null) {
-            log.error("No device with name '{}' could be found! Check your config.", deviceName);
-            return new CommandResult(false, String.format("No device with name '%s' could be found! Check your config.", deviceName));
+            log.error("No remote control device with name '{}' could be found! Check your config.", deviceName);
+            return new CommandResult(false, String.format("No remote control device with name '%s' could be found! Check your config.", deviceName));
         }
 
        RemoteControlDevice remote =  house.getPreferredRemoteControlDevice(device.getReceiveRF());
