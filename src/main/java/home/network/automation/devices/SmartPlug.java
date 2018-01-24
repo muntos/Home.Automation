@@ -2,14 +2,34 @@ package home.network.automation.devices;
 
 import home.network.automation.model.CommandResult;
 import home.network.automation.model.SmartPlugResponse;
-import home.network.automation.model.SmartPlugStatus;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 
 @Slf4j
 public class SmartPlug extends Device {
-    private SmartPlugStatus status;
+    public enum Status {
+        ON,
+        OFF,
+        UNKNOWN;
+    }
+
+    private static Status value(String status){
+        switch (status){
+            case "0":
+                return Status.OFF;
+            case "1":
+                return Status.ON;
+            default:
+                return Status.UNKNOWN;
+        }
+    }
+
+    private static Status value(Boolean on){
+        return (on) ? Status.ON : Status.OFF;
+    }
+
+    private Status status;
     private String macAddress;
     private BroadlinkBridge broadlinkBridge;
 
@@ -19,12 +39,12 @@ public class SmartPlug extends Device {
         this.broadlinkBridge = broadlinkBridge;
     }
 
-    public SmartPlugStatus getStatus(){
-        SmartPlugStatus status = SmartPlugStatus.UNKNOWN;
+    public Status getStatus(){
+        Status status = Status.UNKNOWN;
         SmartPlugResponse response = broadlinkBridge.getStatus(name, macAddress, SmartPlugResponse.class);
         if (response != null){
             if (response.getStatus().equals(SmartPlugResponse.status.ok)){
-                status = SmartPlugStatus.value(response.getOnOffStatus());
+                status = value(response.getOnOffStatus());
             }
         }
         log.info("'{}' (MAC = {}) status: {}", name, macAddress, status);
@@ -39,6 +59,7 @@ public class SmartPlug extends Device {
         if (response != null){
             Boolean success = response.getStatus().equals(SmartPlugResponse.status.ok);
             log.info("'{}' (MAC = {}) set status to '{}' returned {}", name, macAddress, on, success);
+            this.status = value(on);
             return new CommandResult(success, response.getMsg());
         }
 
