@@ -22,6 +22,8 @@ import java.util.concurrent.TimeUnit;
 
 import static home.network.automation.devices.SmartPlug.Status.OFF;
 import static home.network.automation.devices.SmartPlug.Status.ON;
+import static net.whistlingfish.harmony.config.Activity.Status.ACTIVITY_IS_STARTING;
+import static net.whistlingfish.harmony.config.Activity.Status.HUB_IS_TURNING_OFF;
 
 @Slf4j
 @Component
@@ -45,7 +47,7 @@ public class SmartPlugControl {
             harmonyClient.addListener(new ActivityChangeListener() {
                 @Override
                 public void activityStarted(Activity activity) {
-                    log.info("activity changed: [{}] {}", activity.getId(), activity.getLabel());
+                    //log.info("activity changed: [{}] {}", activity.getId(), activity.getLabel());
                 }
             });
 
@@ -72,7 +74,7 @@ public class SmartPlugControl {
             log.error("Could not find any smart plug named '{}', check your configuration!", plugName);
             return;
         }
-        if (status == Activity.Status.ACTIVITY_IS_STARTING){
+        if (status == ACTIVITY_IS_STARTING){
             int sec = smartPlug.secondsSinceLastStatusChange();
             if (sec > h80PowerOnOffWaitTIme) {
                 log.info("Power on '{}' plug!", plugName);
@@ -80,7 +82,7 @@ public class SmartPlugControl {
             } else{
                 scheduleSmartPlugAction(smartPlug, ON, h80PowerOnOffWaitTIme - sec);
             }
-        } else if (status == Activity.Status.HUB_IS_OFF){
+        } else if (status == HUB_IS_TURNING_OFF){
             scheduleSmartPlugAction(smartPlug, OFF, 20);
         }
 
