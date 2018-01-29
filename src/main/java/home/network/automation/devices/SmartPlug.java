@@ -3,6 +3,8 @@ package home.network.automation.devices;
 import home.network.automation.model.CommandResult;
 import home.network.automation.model.SmartPlugResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
+import org.joda.time.Seconds;
 
 import java.util.HashMap;
 
@@ -29,9 +31,20 @@ public class SmartPlug extends Device {
         return (on) ? Status.ON : Status.OFF;
     }
 
-    private Status status;
+    private Boolean value(Status status){
+        switch (status){
+            case ON:
+                return true;
+            case OFF:
+                return false;
+            default:
+                return true;
+        }
+    }
+
     private String macAddress;
     private BroadlinkBridge broadlinkBridge;
+    private DateTime lastStatusChange = new DateTime();
 
     public SmartPlug(String name, String shortName, String macAddress, BroadlinkBridge broadlinkBridge) {
         super(name, shortName);
@@ -48,22 +61,28 @@ public class SmartPlug extends Device {
             }
         }
         log.info("'{}' (MAC = {}) status: {}", name, macAddress, status);
-        this.status = status;
         return status;
     }
 
-    public CommandResult setStatus(Boolean on){
+    public CommandResult setStatus(Status status){
         HashMap<String, String> values = new HashMap<>();
-        values.put("on", on.toString());
+        values.put("on", value(status).toString());
         SmartPlugResponse response = broadlinkBridge.setStatus(values, name, macAddress, SmartPlugResponse.class);
         if (response != null){
             Boolean success = response.getStatus().equals(SmartPlugResponse.status.ok);
-            log.info("'{}' (MAC = {}) set status to '{}' returned {}", name, macAddress, on, success);
-            this.status = value(on);
+            log.info("'{}' (MAC = {}) set status to '{}' returned {}", name, macAddress, status, success);
+            if (success){
+                lastStatusChange = new DateTime();
+            }
             return new CommandResult(success, response.getMsg());
         }
 
-        return new CommandResult(false, String.format("Failed to set '%s' (MAC = %s) status to '%s'", name, macAddress, on));
+        return new CommandResult(false, String.format("Failed to set '%s' (MAC = %s) status to '%s'", name, macAddress, status));
+    }
+
+    public int secondsSinceLastStatusChange(){
+        Seconds seconds = Seconds.secondsBetween(lastStatusChange, new DateTime());
+        return seconds.getSeconds();
     }
 
 }

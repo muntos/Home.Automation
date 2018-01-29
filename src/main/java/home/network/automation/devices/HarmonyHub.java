@@ -5,12 +5,14 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import home.network.automation.model.Button;
 import home.network.automation.model.CommandResult;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.whistlingfish.harmony.HarmonyClient;
 import net.whistlingfish.harmony.HarmonyClientModule;
 
 @Slf4j
 public class HarmonyHub extends RemoteControlDevice{
+    @Getter
     @Inject
     private HarmonyClient harmonyClient;
 
@@ -56,7 +58,7 @@ public class HarmonyHub extends RemoteControlDevice{
 
     @Override
     public CommandResult pressButtonUsingRF(Button button) {
-        log.info("'{}' received RF button id {} ({})", name, button.getButtonId(), button.getFriendlyName());
+        log.info("'{}' received RF code id {} ({})", name, button.getCodeId(), button.getFriendlyName());
         log.error("This remote can't control RF devices!");
         return new CommandResult(false, "This remote can't control RF devices!");
     }

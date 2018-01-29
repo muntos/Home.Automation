@@ -6,7 +6,7 @@ import static home.network.automation.model.Button.Mapping.NO_MAPPING;
 
 @Getter
 public class Button {
-    private int buttonId;
+    private int codeId;
     private String buttonName;
     private String friendlyName;
     private Mapping mapping = NO_MAPPING;
@@ -18,8 +18,8 @@ public class Button {
         VOLUME_MUTE
     }
 
-    public Button(int buttonId, String buttonName, String friendlyName) {
-        this.buttonId = buttonId;
+    public Button(int codeId, String buttonName, String friendlyName) {
+        this.codeId = codeId;
         this.buttonName = buttonName;
         this.friendlyName = friendlyName;
     }

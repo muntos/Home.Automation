@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
-public abstract class BroadlinkBridgeResponse {
+public class BroadlinkBridgeResponse {
     public enum status{
         ok,
         failed

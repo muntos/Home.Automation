@@ -11,17 +11,19 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class ScheduledTasks {
+
+
     @Autowired
     private House house;
 
-    @Scheduled(fixedDelay = 10000)
+    //@Scheduled(fixedDelay = 10000)
     public void checkHarmonyActivity() {
         SmartPlug smartPlug = house.getDevice("SP3_H80");
 
         if (smartPlug.getStatus() == SmartPlug.Status.ON) {
-            smartPlug.setStatus(false);
+            smartPlug.setStatus(SmartPlug.Status.OFF);
         } else {
-            smartPlug.setStatus(true);
+            smartPlug.setStatus(SmartPlug.Status.ON);
         }
         log.info("Device '{}' has status {}", smartPlug.getName(), smartPlug.getStatus());
     }

@@ -55,7 +55,7 @@ public class BroadlinkBridge {
             ResponseEntity<T> response = restTemplate
                     .getForEntity(url, type);
             entity = response.getBody();
-            if (!entity.getStatus().equals(SmartPlugResponse.status.ok)){
+            if (!entity.getStatus().equals(BroadlinkBridgeResponse.status.ok)){
                 log.error("Get '{}' (MAC = {}) status returned: {}", name, macAddress, entity.getMsg());
             }
         }catch (RestClientException ex){
@@ -78,7 +78,7 @@ public class BroadlinkBridge {
             ResponseEntity<T> response = restTemplate
                     .getForEntity(url, type);
             entity = response.getBody();
-            if (!entity.getStatus().equals(SmartPlugResponse.status.ok)){
+            if (!entity.getStatus().equals(BroadlinkBridgeResponse.status.ok)){
                 log.error("Set '{}' (MAC = {}) status returned: {}", name, macAddress, entity.getMsg());
             }
         }catch (RestClientException ex){
