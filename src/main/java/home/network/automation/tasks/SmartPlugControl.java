@@ -15,10 +15,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import static home.network.automation.devices.SmartPlug.Status.OFF;
 import static home.network.automation.devices.SmartPlug.Status.ON;
@@ -74,6 +71,15 @@ public class SmartPlugControl {
             log.error("Could not find any smart plug named '{}', check your configuration!", plugName);
             return;
         }
+
+        if (status == ACTIVITY_IS_STARTING || status == HUB_IS_TURNING_OFF){
+            Future existingFuture = futures.get(smartPlug.getName());
+            if (existingFuture != null){
+                log.info("Found an existing schedule for '{}' plug, cancelling now!", smartPlug.getName());
+                existingFuture.cancel(false);
+            }
+        }
+
         if (status == ACTIVITY_IS_STARTING){
             int sec = smartPlug.secondsSinceLastStatusChange();
             if (sec > h80PowerOnOffWaitTIme) {
@@ -83,19 +89,16 @@ public class SmartPlugControl {
                 scheduleSmartPlugAction(smartPlug, ON, h80PowerOnOffWaitTIme - sec);
             }
         } else if (status == HUB_IS_TURNING_OFF){
-            scheduleSmartPlugAction(smartPlug, OFF, 20);
+            scheduleSmartPlugAction(smartPlug, OFF, 300);
         }
-
 
     }
 
     private void scheduleSmartPlugAction(SmartPlug smartPlug, SmartPlug.Status status, int delay){
         log.info("Schedule '{}' to {} in {} seconds", smartPlug.getName(), status, delay);
-        ScheduledFuture<?> future = scheduler.schedule(new Runnable() {
-            @Override
-            public void run() {
-                smartPlug.setStatus(status);
-            }}, delay, TimeUnit.SECONDS);
+        ScheduledFuture<?> future = scheduler.schedule(() -> {
+            smartPlug.setStatus(status);
+        }, delay, TimeUnit.SECONDS);
         futures.put(smartPlug.getName(), future);
     }
 }

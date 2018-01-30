@@ -27,10 +27,6 @@ public class SmartPlug extends Device {
         }
     }
 
-    private static Status value(Boolean on){
-        return (on) ? Status.ON : Status.OFF;
-    }
-
     private Boolean value(Status status){
         switch (status){
             case ON:
