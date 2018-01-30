@@ -65,7 +65,7 @@ public class BroadlinkBridge {
         return entity;
     }
 
-    public <T extends BroadlinkBridgeResponse> T setStatus(Map<String, String> values, String name, String macAddress, Class<T> type){
+    public <T extends BroadlinkBridgeResponse> T sendCommand(Map<String, String> values, String name, String macAddress, Class<T> type){
         log.info("Set '{}' (MAC = {}) status to '{}'...",name, macAddress, values);
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("deviceMac", macAddress);

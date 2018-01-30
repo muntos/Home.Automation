@@ -67,7 +67,7 @@ public class SmartPlug extends Device {
     public CommandResult setStatus(Status status){
         HashMap<String, String> values = new HashMap<>();
         values.put("on", value(status).toString());
-        SmartPlugResponse response = broadlinkBridge.setStatus(values, name, macAddress, SmartPlugResponse.class);
+        SmartPlugResponse response = broadlinkBridge.sendCommand(values, name, macAddress, SmartPlugResponse.class);
         if (response != null){
             Boolean success = response.getStatus().equals(SmartPlugResponse.status.ok);
             log.info("'{}' (MAC = {}) set status to '{}' returned {}", name, macAddress, status, success);

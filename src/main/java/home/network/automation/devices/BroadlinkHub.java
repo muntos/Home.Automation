@@ -35,7 +35,7 @@ public class BroadlinkHub extends RemoteControlDevice {
         log.info("'{}' received Infrared ==> {} : {} (id={})", name, deviceName, button.getButtonName(), button.getCodeId());
         HashMap<String, String> values = new HashMap<>();
         values.put("codeId", String.valueOf(button.getCodeId()));
-        BroadlinkBridgeResponse response = broadlinkBridge.setStatus(values, name, macAddress, BroadlinkBridgeResponse.class);
+        BroadlinkBridgeResponse response = broadlinkBridge.sendCommand(values, name, macAddress, BroadlinkBridgeResponse.class);
         if (response != null){
             Boolean success = response.getStatus().equals(BroadlinkBridgeResponse.status.ok);
             log.info("'{}' (MAC = {}) press button '{}' (codeId={}) returned {}", name, macAddress, button.getFriendlyName(), button.getCodeId(), success);
