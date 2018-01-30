@@ -48,4 +48,14 @@ public class Config {
 
         return house;
     }
+
+    @Bean
+    LogbackFilter logbackFilter(){
+        return new LogbackFilter();
+    }
+
+    @Bean
+    ApplicationContextProvider applicationContextProvider(){
+        return new ApplicationContextProvider();
+    }
 }
