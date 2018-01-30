@@ -61,10 +61,10 @@ public class SmartPlugControl {
     }
 
     private void processActivityEvents(Activity activity, Activity.Status status){
-        controlH80Plug(activity, status);
+        controlH80Plug(status);
     }
 
-    private void controlH80Plug(Activity activity, Activity.Status status){
+    public void controlH80Plug(Activity.Status status){
         String plugName = "SP3_H80";
         SmartPlug smartPlug = house.getDevice(plugName);
         if (smartPlug == null){
@@ -77,6 +77,7 @@ public class SmartPlugControl {
             if (existingFuture != null){
                 log.info("Found an existing schedule for '{}' plug, cancelling now!", smartPlug.getName());
                 existingFuture.cancel(false);
+                futures.remove(smartPlug.getName());
             }
         }
 
@@ -89,7 +90,7 @@ public class SmartPlugControl {
                 scheduleSmartPlugAction(smartPlug, ON, h80PowerOnOffWaitTIme - sec);
             }
         } else if (status == HUB_IS_TURNING_OFF){
-            scheduleSmartPlugAction(smartPlug, OFF, 300);
+            scheduleSmartPlugAction(smartPlug, OFF, 40);
         }
 
     }
@@ -98,6 +99,7 @@ public class SmartPlugControl {
         log.info("Schedule '{}' to {} in {} seconds", smartPlug.getName(), status, delay);
         ScheduledFuture<?> future = scheduler.schedule(() -> {
             smartPlug.setStatus(status);
+            futures.remove(smartPlug.getName());
         }, delay, TimeUnit.SECONDS);
         futures.put(smartPlug.getName(), future);
     }

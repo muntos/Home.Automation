@@ -5,7 +5,7 @@
 
 	<groupId>home.network</groupId>
 	<artifactId>automation</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.3.1</version>
 	<packaging>war</packaging>
 
 	<name>Home Automation</name>
@@ -144,6 +144,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+        <finalName>home</finalName>
 	</build>
 
 

@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class Log {
-    private Long date;
+    private String date;
     private String level;
     private String message;
 }

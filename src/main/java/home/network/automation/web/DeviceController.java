@@ -18,7 +18,17 @@ public class DeviceController {
     }
 
     @GetMapping("/lms/volume/{volumeValue}")
-    public CommandResult changeLMSvolume(@PathVariable("volumeValue") String value){
+    public CommandResult changedLMSvolume(@PathVariable("volumeValue") String value){
         return commandsService.changedLogitechMediaServerVolume(value);
+    }
+
+    @GetMapping("/lms/turnOn")
+    public void turnOnLMS(){
+        commandsService.turnOnLogitechMediaServer();
+    }
+
+    @GetMapping("/lms/turnOff")
+    public void turnOffLMS(){
+        commandsService.turnOffLogitechMediaServer();
     }
 }

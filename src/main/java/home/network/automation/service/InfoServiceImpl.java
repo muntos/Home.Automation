@@ -4,6 +4,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import home.network.automation.model.Log;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -17,7 +18,7 @@ public class InfoServiceImpl implements InfoService {
     public List<Log> displayLog() {
         return events.stream()
                 .sorted(Comparator.comparing(ILoggingEvent::getTimeStamp).reversed())
-                .map(e -> new Log(e.getTimeStamp(), e.getLevel().toString(), e.getFormattedMessage()))
+                .map(e -> new Log(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(e.getTimeStamp()), e.getLevel().toString(), e.getFormattedMessage()))
                 .collect(Collectors.toList());
 
     }

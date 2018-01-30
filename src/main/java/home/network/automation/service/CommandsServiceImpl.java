@@ -6,7 +6,9 @@ import home.network.automation.devices.RemoteControlledDevice;
 import home.network.automation.model.Button;
 import home.network.automation.model.CommandResult;
 import home.network.automation.observer.House;
+import home.network.automation.tasks.SmartPlugControl;
 import lombok.extern.slf4j.Slf4j;
+import net.whistlingfish.harmony.config.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Service;
 public class CommandsServiceImpl implements CommandsService {
     @Autowired
     private House house;
+    @Autowired
+    private SmartPlugControl smartPlugControl;
 
     @Override
     public CommandResult pressRemoteButton(String deviceName, String buttonName) {
@@ -78,4 +82,15 @@ public class CommandsServiceImpl implements CommandsService {
         return commandResult;
     }
 
+    @Override
+    public void turnOnLogitechMediaServer() {
+        log.info("Received Turn on command from LMS");
+        smartPlugControl.controlH80Plug(Activity.Status.ACTIVITY_IS_STARTING);
+    }
+
+    @Override
+    public void turnOffLogitechMediaServer() {
+        log.info("Received Turn off command from LMS");
+        smartPlugControl.controlH80Plug(Activity.Status.HUB_IS_TURNING_OFF);
+    }
 }
