@@ -1,10 +1,10 @@
 package home.network.automation.devices;
 
 import home.network.automation.model.BroadlinkBridgeResponse;
-import home.network.automation.model.SmartPlugResponse;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
@@ -18,6 +18,9 @@ import java.util.Map;
 @Slf4j
 @Getter
 public class BroadlinkBridge {
+    private final int READ_TIMEOUT = 2000;
+    private final int CONNECT_TIMEOUT = 2000;
+
     private String protocol;
     private String address;
     private Integer port;
@@ -52,6 +55,10 @@ public class BroadlinkBridge {
 
         try {
             RestTemplate restTemplate = new RestTemplate();
+            SimpleClientHttpRequestFactory rf =
+                    (SimpleClientHttpRequestFactory)restTemplate.getRequestFactory();
+            rf.setReadTimeout(READ_TIMEOUT);
+            rf.setConnectTimeout(CONNECT_TIMEOUT);
             ResponseEntity<T> response = restTemplate
                     .getForEntity(url, type);
             entity = response.getBody();
@@ -66,7 +73,7 @@ public class BroadlinkBridge {
     }
 
     public <T extends BroadlinkBridgeResponse> T sendCommand(Map<String, String> values, String name, String macAddress, Class<T> type){
-        log.info("Set '{}' (MAC = {}) status to '{}'...",name, macAddress, values);
+        log.info("Send to '{}' (MAC = {}) command '{}'",name, macAddress, values);
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("deviceMac", macAddress);
         queryParams.putAll(values);
@@ -75,14 +82,18 @@ public class BroadlinkBridge {
 
         try {
             RestTemplate restTemplate = new RestTemplate();
+            SimpleClientHttpRequestFactory rf =
+                    (SimpleClientHttpRequestFactory)restTemplate.getRequestFactory();
+            rf.setReadTimeout(READ_TIMEOUT);
+            rf.setConnectTimeout(CONNECT_TIMEOUT);
             ResponseEntity<T> response = restTemplate
                     .getForEntity(url, type);
             entity = response.getBody();
             if (!entity.getStatus().equals(BroadlinkBridgeResponse.status.ok)){
-                log.error("Set '{}' (MAC = {}) status returned: {}", name, macAddress, entity.getMsg());
+                log.warn("Send to '{}' (MAC = {}) command '{}' returned: {}", name, macAddress, values, entity.getMsg());
             }
         }catch (RestClientException ex){
-            log.error("Set '{}' (MAC = {}) status returned exception: {}", name, macAddress, ex.getMessage());
+            log.warn("Send to '{}' (MAC = {}) command '{}' returned exception: {}", name, macAddress, values, ex.getMessage());
         }
 
         return entity;

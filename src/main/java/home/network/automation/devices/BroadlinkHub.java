@@ -10,6 +10,7 @@ import java.util.HashMap;
 @Slf4j
 public class BroadlinkHub extends RemoteControlDevice {
     private String macAddress;
+    private final int MAX_RETRIES = 3;
 
     private BroadlinkBridge broadlinkBridge;
 
@@ -35,13 +36,29 @@ public class BroadlinkHub extends RemoteControlDevice {
         log.info("'{}' received Infrared ==> {} : {} (id={})", name, deviceName, button.getButtonName(), button.getCodeId());
         HashMap<String, String> values = new HashMap<>();
         values.put("codeId", String.valueOf(button.getCodeId()));
-        BroadlinkBridgeResponse response = broadlinkBridge.sendCommand(values, name, macAddress, BroadlinkBridgeResponse.class);
-        if (response != null){
-            Boolean success = response.getStatus().equals(BroadlinkBridgeResponse.status.ok);
-            log.info("'{}' (MAC = {}) press button '{}' (codeId={}) returned {}", name, macAddress, button.getFriendlyName(), button.getCodeId(), success);
-            return new CommandResult(success, response.getMsg());
+
+        Boolean success = false;
+        int retries = 0;
+        while (!success  && retries < MAX_RETRIES ) {
+            retries++;
+            BroadlinkBridgeResponse response = broadlinkBridge.sendCommand(values, name, macAddress, BroadlinkBridgeResponse.class);
+            if (response != null) {
+                success = response.getStatus().equals(BroadlinkBridgeResponse.status.ok);
+                if (success) {
+                    log.info("'{}' (MAC = {}) press button '{}' (codeId={}) returned {}", name, macAddress, button.getFriendlyName(), button.getCodeId(), success);
+                    return new CommandResult(success, response.getMsg());
+                } else {
+                    log.warn("'{}' (MAC = {}) press button '{}' (codeId={}) returned {}", name, macAddress, button.getFriendlyName(), button.getCodeId(), success);
+                }
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                log.error(e.getMessage());
+            }
         }
 
+        log.error("Failed to press button '{}' on '{}' (MAC = {}), giving up after {} retries", button.getFriendlyName(), name, macAddress, MAX_RETRIES);
         return new CommandResult(false, String.format("Failed to press button '%s' on '%s' (MAC = %s)", button.getFriendlyName(), name, macAddress));
     }
 
