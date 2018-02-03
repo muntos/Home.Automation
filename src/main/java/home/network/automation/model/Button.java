@@ -15,7 +15,10 @@ public class Button {
         NO_MAPPING,
         VOLUME_UP,
         VOLUME_DOWN,
-        VOLUME_MUTE
+        VOLUME_MUTE,
+        CURTAIN_LIVINGROOM_OPEN,
+        CURTAIN_LIVINGROOM_CLOSE,
+        CURTAIN_LIVINGROOM_STOP
     }
 
     public Button(int codeId, String buttonName, String friendlyName) {

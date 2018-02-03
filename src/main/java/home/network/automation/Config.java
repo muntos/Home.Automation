@@ -39,9 +39,10 @@ public class Config {
                                 .setPrefferredRemote(house.getDevice("RMPRO"))
                                 .addButton(new Button(4, "VolumeUp", "Volume Up").mapsTo(Button.Mapping.VOLUME_UP))
                                 .addButton(new Button(3, "VolumeDown", "Volume Down").mapsTo(Button.Mapping.VOLUME_DOWN)))
-            .addDevice(new RemoteControlledDevice("Electric curtain for Living room", "curtain", true)
-                                .addButton(new Button(3, "close", "Curtain close"))
-                                .addButton(new Button(4, "open", "Curtain open")))
+            .addDevice(new RemoteControlledDevice("Electric curtain for Living room", "curtainLivingroom", true)
+                                .addButton(new Button(3, "close", "Curtain close").mapsTo(Button.Mapping.CURTAIN_LIVINGROOM_CLOSE))
+                                .addButton(new Button(4, "open", "Curtain open").mapsTo(Button.Mapping.CURTAIN_LIVINGROOM_OPEN))
+                                .addButton(new Button(5, "stop", "Curtain stop").mapsTo(Button.Mapping.CURTAIN_LIVINGROOM_STOP)))
             .addDevice(new RemoteControlledDevice("LG OLED TV", "TV")
                                 .addButton(new Button(0, "chUp", "Channel Up"))
                                 .addButton(new Button(0, "chDown", "Channel Down")));

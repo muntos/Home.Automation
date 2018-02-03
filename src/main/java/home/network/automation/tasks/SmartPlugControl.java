@@ -33,6 +33,9 @@ public class SmartPlugControl {
     @Value("${hegel.h80.powerOnOff.wait.seconds}")
     private int h80PowerOnOffWaitTIme;
 
+    @Value("${smartPlug.powerOff.wait.seconds}")
+    private int smartPlugPowerOffWait;
+
     private Map<String, ScheduledFuture> futures = new HashMap<>();
 
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -82,6 +85,11 @@ public class SmartPlugControl {
         }
 
         if (status == ACTIVITY_IS_STARTING){
+            SmartPlug.Status currentStatus = smartPlug.getStatus();
+            if (currentStatus == SmartPlug.Status.ON){
+                log.info("Plug {} already ON, nothing to do.", smartPlug.getName());
+                return;
+            }
             int sec = smartPlug.secondsSinceLastStatusChange();
             if (sec > h80PowerOnOffWaitTIme) {
                 log.info("Power on '{}' plug!", plugName);
@@ -90,9 +98,8 @@ public class SmartPlugControl {
                 scheduleSmartPlugAction(smartPlug, ON, h80PowerOnOffWaitTIme - sec);
             }
         } else if (status == HUB_IS_TURNING_OFF){
-            scheduleSmartPlugAction(smartPlug, OFF, 40);
+            scheduleSmartPlugAction(smartPlug, OFF, smartPlugPowerOffWait);
         }
-
     }
 
     private void scheduleSmartPlugAction(SmartPlug smartPlug, SmartPlug.Status status, int delay){
