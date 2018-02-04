@@ -55,7 +55,7 @@ public class SmartPlugControl {
                 @Override
                 public void activityStatusChanged(Activity activity, Activity.Status status) {
                     log.info("activity status changed: [{}] {} - {}", activity.getId(), activity.getLabel(), status.toString());
-                    processActivityEvents(activity, status);
+                    processActivityEvents(status);
                 }
             });
         } catch (RuntimeException ex){
@@ -63,7 +63,7 @@ public class SmartPlugControl {
         }
     }
 
-    private void processActivityEvents(Activity activity, Activity.Status status){
+    private void processActivityEvents(Activity.Status status){
         controlH80Plug(status);
     }
 
@@ -87,7 +87,7 @@ public class SmartPlugControl {
         if (status == ACTIVITY_IS_STARTING){
             SmartPlug.Status currentStatus = smartPlug.getStatus();
             if (currentStatus == SmartPlug.Status.ON){
-                log.info("Plug {} already ON, nothing to do.", smartPlug.getName());
+                log.info("Plug '{}' already ON, nothing to do.", smartPlug.getName());
                 return;
             }
             int sec = smartPlug.secondsSinceLastStatusChange();

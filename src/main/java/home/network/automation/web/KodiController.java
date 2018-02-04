@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 public class KodiController {
     @Autowired
     private Kodi kodi;
-    @Autowired
-    private CurtainControl curtainControl;
 
     @GetMapping
     @ResponseBody

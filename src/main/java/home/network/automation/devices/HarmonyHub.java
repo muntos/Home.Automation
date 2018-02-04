@@ -16,6 +16,7 @@ public class HarmonyHub extends RemoteControlDevice{
     @Inject
     private HarmonyClient harmonyClient;
 
+    @Getter
     private String address;
 
     public HarmonyHub(String name, String shortName, String address) {
