@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
+
+    <property name="LOG_PATH_DEV" value="C:/logs" />
+    <property name="LOG_PATH_PROD" value="/usr/local/tomcat/logs" />
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="home.network.automation.LogbackFilter"/>
         <encoder>
@@ -10,8 +14,52 @@
         </encoder>
     </appender>
 
-    <root level="info">
-        <appender-ref ref="STDOUT"/>
-    </root>
+    <springProfile name="dev">
+        <appender name="SAVE-TO-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH_DEV}/home.log</file>
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <Pattern>
+                    %d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n
+                </Pattern>
+            </encoder>
+
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>
+                    ${LOG_PATH_DEV}/archived/home%d{dd-MM-yyyy}.log
+                </fileNamePattern>
+                <maxHistory>10</maxHistory>
+                <totalSizeCap>100MB</totalSizeCap>
+            </rollingPolicy>
+        </appender>
+        <root level="info">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="SAVE-TO-FILE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="prod">
+        <appender name="SAVE-TO-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH_PROD}/home.log</file>
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <Pattern>
+                    %d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n
+                </Pattern>
+            </encoder>
+
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>
+                    ${LOG_PATH_PROD}/archived/home%d{dd-MM-yyyy}.log
+                </fileNamePattern>
+                <maxHistory>10</maxHistory>
+                <totalSizeCap>100MB</totalSizeCap>
+            </rollingPolicy>
+        </appender>
+        <root level="info">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="SAVE-TO-FILE"/>
+        </root>
+    </springProfile>
+
+
 
 </configuration>
