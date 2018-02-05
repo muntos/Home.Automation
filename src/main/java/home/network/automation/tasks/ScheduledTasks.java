@@ -1,7 +1,6 @@
 package home.network.automation.tasks;
 
 import home.network.automation.devices.HarmonyHub;
-import home.network.automation.devices.SmartPlug;
 import home.network.automation.observer.House;
 import lombok.extern.slf4j.Slf4j;
 import net.whistlingfish.harmony.HarmonyClient;

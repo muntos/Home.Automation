@@ -59,7 +59,7 @@ public class SmartPlugControl {
                 }
             });
         } catch (RuntimeException ex){
-
+                log.error("Exception in SmartPlugControl init(): {}", ex.getMessage());
         }
     }
 
