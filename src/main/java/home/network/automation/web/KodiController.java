@@ -1,7 +1,6 @@
 package home.network.automation.web;
 
 import home.network.automation.components.Kodi;
-import home.network.automation.tasks.CurtainControl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,7 @@ public class KodiController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity playbackStarted(@RequestParam("ev") String event){
+    public ResponseEntity newEvent(@RequestParam("ev") String event){
        log.info("Received Kodi event '{}'", event);
        Kodi.Event ev = Kodi.Event.of(event);
        if (ev == null){

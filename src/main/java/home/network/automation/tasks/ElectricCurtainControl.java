@@ -2,6 +2,7 @@ package home.network.automation.tasks;
 
 import home.network.automation.components.Kodi;
 import home.network.automation.components.KodiListener;
+import home.network.automation.devices.ElectricCurtain;
 import home.network.automation.devices.RemoteControlledDevice;
 import home.network.automation.model.Button;
 import home.network.automation.observer.House;
@@ -13,14 +14,11 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Slf4j
 @Component
-public class CurtainControl implements KodiListener {
+public class ElectricCurtainControl implements KodiListener {
     @Autowired
     private Kodi kodi;
     @Autowired
@@ -32,15 +30,8 @@ public class CurtainControl implements KodiListener {
 
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-    private String curtainLivingRoomName = "curtainLivingRoom";
-    private RemoteControlledDevice curtainLivingRoom = house.getDevice(curtainLivingRoomName);
-
     @PostConstruct
     public void init(){
-        if (curtainLivingRoom == null){
-            log.error("Could not find any curtain named '{}', check your configuration!", curtainLivingRoomName);
-            return;
-        }
         kodi.addListener(this::eventReceived);
     }
 
@@ -51,12 +42,30 @@ public class CurtainControl implements KodiListener {
     }
 
     private void controlLivingRoomCurtain(Kodi.Event event){
-        Button curtainClose = curtainLivingRoom.getButton(Button.Mapping.CURTAIN_LIVINGROOM_CLOSE);
-        Button curtainOpen = curtainLivingRoom.getButton(Button.Mapping.CURTAIN_LIVINGROOM_OPEN);
+        String curtainName = "curtainLivingRoom";
+        ElectricCurtain curtain = house.getDevice(curtainName);
+        if (curtain == null){
+            log.error("Could not find any curtain named '{}', check your configuration!", curtainName);
+            return;
+        }
+
+        Button curtainClose = curtain.getButton(Button.Mapping.CURTAIN_LIVINGROOM_CLOSE);
+        Button curtainOpen = curtain.getButton(Button.Mapping.CURTAIN_LIVINGROOM_OPEN);
+        if (curtainClose == null || curtainOpen == null){
+            log.error("Could not find mapped buttons for '{}' curtain control, check your configuration!", curtainName);
+            return;
+        }
+
+        Future existingFuture = futures.get(curtain.getName());
+        if (existingFuture != null){
+            log.info("Found an existing schedule for '{}' curtain, cancelling now!", curtain.getName());
+            existingFuture.cancel(false);
+            futures.remove(curtain.getName());
+        }
 
         switch (event){
             case PLAY_STARTED:
-                scheduleCurtainAction(curtainLivingRoom, curtainClose, 60);
+                scheduleCurtainAction(curtain, curtainClose, curtain.getWaitOnEventBeforeClose());
                 break;
             case PLAY_PAUSED:
                 break;
