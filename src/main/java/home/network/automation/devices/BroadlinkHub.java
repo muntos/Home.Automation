@@ -34,6 +34,16 @@ public class BroadlinkHub extends RemoteControlDevice {
     @Override
     public CommandResult pressButtonUsingInfrared(String deviceName, Button button) {
         log.info("'{}' received Infrared ==> {} : {} (id={})", name, deviceName, button.getButtonName(), button.getCodeId());
+        return pressButton(button);
+    }
+
+    @Override
+    public CommandResult pressButtonUsingRF(Button button) {
+        log.info("'{}' received RF button id {} ({})", name, button.getCodeId(), button.getFriendlyName());
+        return pressButton(button);
+    }
+
+    private CommandResult pressButton(Button button){
         HashMap<String, String> values = new HashMap<>();
         values.put("codeId", String.valueOf(button.getCodeId()));
 
@@ -61,11 +71,4 @@ public class BroadlinkHub extends RemoteControlDevice {
         log.error("Failed to press button '{}' on '{}' (MAC = {}), giving up after {} retries", button.getFriendlyName(), name, macAddress, MAX_RETRIES);
         return new CommandResult(false, String.format("Failed to press button '%s' on '%s' (MAC = %s)", button.getFriendlyName(), name, macAddress));
     }
-
-    @Override
-    public CommandResult pressButtonUsingRF(Button button) {
-        log.info("'{}' received RF button id {} ({})", name, button.getCodeId(), button.getFriendlyName());
-        return new CommandResult(true, "success");
-    }
-
 }

@@ -9,7 +9,8 @@ import java.util.List;
 public class Kodi {
     public static enum Event{
         PLAY_STARTED,
-        PLAY_PAUSED;
+        PLAY_PAUSED,
+        PLAY_ENDED;
 
         public static Event of(String ev){
             switch (ev.toLowerCase()){
@@ -17,6 +18,8 @@ public class Kodi {
                     return PLAY_STARTED;
                 case "playpaused":
                     return PLAY_PAUSED;
+                case "playended":
+                    return PLAY_ENDED;
                 default:
                     return null;
             }

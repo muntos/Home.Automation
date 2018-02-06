@@ -69,6 +69,8 @@ public class ElectricCurtainControl implements KodiListener {
                 break;
             case PLAY_PAUSED:
                 break;
+            case PLAY_ENDED:
+                scheduleCurtainAction(curtain, curtainOpen, curtain.getWaitOnEventBeforeOpen());
         }
     }
 
