@@ -7,7 +7,7 @@ import java.util.List;
 
 @Component
 public class Kodi {
-    public static enum Event{
+    public enum Event{
         PLAY_STARTED,
         PLAY_PAUSED,
         PLAY_ENDED;

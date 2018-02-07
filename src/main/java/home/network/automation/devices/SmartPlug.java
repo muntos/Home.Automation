@@ -2,6 +2,7 @@ package home.network.automation.devices;
 
 import home.network.automation.model.CommandResult;
 import home.network.automation.model.SmartPlugResponse;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.joda.time.Seconds;
@@ -41,11 +42,19 @@ public class SmartPlug extends Device {
     private String macAddress;
     private BroadlinkBridge broadlinkBridge;
     private DateTime lastStatusChange = new DateTime();
+    //number of seconds to wait (after command is received) before turn off
+    @Getter
+    private int waitBeforeTurnOff;
+    //minimum number of seconds to wait before states change (from On->Off or from Off->On
+    @Getter
+    private int minWaitBeforeStatesChange;
 
-    public SmartPlug(String name, String shortName, String macAddress, BroadlinkBridge broadlinkBridge) {
+    public SmartPlug(String name, String shortName, String macAddress, BroadlinkBridge broadlinkBridge, int waitBeforeTurnOff, int minWaitBeforeStatesChange) {
         super(name, shortName);
         this.macAddress = macAddress;
         this.broadlinkBridge = broadlinkBridge;
+        this.waitBeforeTurnOff = waitBeforeTurnOff;
+        this.minWaitBeforeStatesChange = minWaitBeforeStatesChange;
     }
 
     public Status getStatus(){

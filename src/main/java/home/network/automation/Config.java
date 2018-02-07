@@ -32,7 +32,7 @@ public class Config {
         BroadlinkBridge broadlinkBridge = new BroadlinkBridge(rmBridgeProtocol, rmBridgeAddress, rmBridgePort);
         House house = new House();
         house
-            .addDevice(new SmartPlug("Broadlink SP3 connected to Hegel H80 amplifier","SP3_H80", sp3forH80Mac, broadlinkBridge))
+            .addDevice(new SmartPlug("Broadlink SP3 connected to Hegel H80 amplifier","SP3_H80", sp3forH80Mac, broadlinkBridge, 60, 60))
             .addDevice(new BroadlinkHub("Broadlink RM-PRO", "RMPRO", rmProMac, broadlinkBridge))
             .addDevice(new HarmonyHub("Logitech Harmony Elite", "Harmony", harmonyAddress, 100))
             .addDevice(new AudioDevice("Hegel Amp", "H80", 30, true)

@@ -30,12 +30,6 @@ public class SmartPlugControl {
     @Autowired
     private House house;
 
-    @Value("${hegel.h80.powerOnOff.wait.seconds}")
-    private int h80PowerOnOffWaitTIme;
-
-    @Value("${smartPlug.powerOff.wait.seconds}")
-    private int smartPlugPowerOffWait;
-
     private Map<String, ScheduledFuture> futures = new HashMap<>();
 
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -91,14 +85,14 @@ public class SmartPlugControl {
                 return;
             }
             int sec = smartPlug.secondsSinceLastStatusChange();
-            if (sec > h80PowerOnOffWaitTIme) {
+            if (sec > smartPlug.getMinWaitBeforeStatesChange()) {
                 log.info("Power on '{}' plug!", plugName);
                 smartPlug.setStatus(ON);
             } else{
-                scheduleSmartPlugAction(smartPlug, ON, h80PowerOnOffWaitTIme - sec);
+                scheduleSmartPlugAction(smartPlug, ON, smartPlug.getMinWaitBeforeStatesChange() - sec);
             }
         } else if (status == HUB_IS_TURNING_OFF){
-            scheduleSmartPlugAction(smartPlug, OFF, smartPlugPowerOffWait);
+            scheduleSmartPlugAction(smartPlug, OFF, smartPlug.getWaitBeforeTurnOff());
         }
     }
 
