@@ -8,9 +8,18 @@ import org.joda.time.DateTime;
 import org.joda.time.Seconds;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.*;
+
+import static home.network.automation.devices.SmartPlug.Status.OFF;
+import static home.network.automation.devices.SmartPlug.Status.ON;
 
 @Slf4j
 public class SmartPlug extends Device {
+    private Map<String, ScheduledFuture> futures = new HashMap<>();
+
+    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
     public enum Status {
         ON,
         OFF,
@@ -20,9 +29,9 @@ public class SmartPlug extends Device {
     private static Status value(String status){
         switch (status){
             case "0":
-                return Status.OFF;
+                return OFF;
             case "1":
-                return Status.ON;
+                return ON;
             default:
                 return Status.UNKNOWN;
         }
@@ -69,7 +78,33 @@ public class SmartPlug extends Device {
         return status;
     }
 
-    public CommandResult setStatus(Status status){
+    public void setStatusWithScheduler(Status status){
+        Future existingFuture = futures.get(name);
+        if (existingFuture != null){
+            log.info("Found an existing schedule for '{}' plug, cancelling now!", name);
+            existingFuture.cancel(false);
+            futures.remove(name);
+        }
+
+        if (status == ON){
+            Status currentStatus = getStatus();
+            if (currentStatus == ON){
+                log.info("Plug '{}' already ON, nothing to do.", name);
+            }
+            int sec = secondsSinceLastStatusChange();
+            if (sec > minWaitBeforeStatesChange) {
+                log.info("Power on '{}' plug!", name);
+                setStatusNow(ON);
+            } else{
+                scheduleSmartPlugAction(ON, minWaitBeforeStatesChange - sec);
+            }
+        } else if (status == OFF){
+            scheduleSmartPlugAction(OFF, waitBeforeTurnOff);
+        }
+
+    }
+
+    private CommandResult setStatusNow(Status status){
         HashMap<String, String> values = new HashMap<>();
         values.put("on", value(status).toString());
         SmartPlugResponse response = broadlinkBridge.sendCommand(values, name, macAddress, SmartPlugResponse.class);
@@ -88,6 +123,15 @@ public class SmartPlug extends Device {
     public int secondsSinceLastStatusChange(){
         Seconds seconds = Seconds.secondsBetween(lastStatusChange, new DateTime());
         return seconds.getSeconds();
+    }
+
+    private void scheduleSmartPlugAction(Status status, int delay){
+        log.info("Schedule '{}' to {} in {} seconds", name, status, delay);
+        ScheduledFuture<?> future = scheduler.schedule(() -> {
+            setStatusNow(status);
+            futures.remove(name);
+        }, delay, TimeUnit.SECONDS);
+        futures.put(name, future);
     }
 
 }
