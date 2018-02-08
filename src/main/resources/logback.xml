@@ -14,6 +14,8 @@
         </encoder>
     </appender>
 
+    <logger name="home.network.automation" level="debug"/>
+
     <springProfile name="dev">
         <root level="info">
             <appender-ref ref="STDOUT"/>
