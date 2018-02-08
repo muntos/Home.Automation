@@ -90,6 +90,7 @@ public class SmartPlug extends Device {
             Status currentStatus = getStatus();
             if (currentStatus == ON){
                 log.info("Plug '{}' already ON, nothing to do.", name);
+                return;
             }
             int sec = secondsSinceLastStatusChange();
             if (sec > minWaitBeforeStatesChange) {
