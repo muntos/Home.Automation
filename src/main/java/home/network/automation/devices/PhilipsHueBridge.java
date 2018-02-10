@@ -2,11 +2,11 @@ package home.network.automation.devices;
 
 import home.network.automation.model.HueBridgeErrorResponse;
 import home.network.automation.model.HueLight;
+import home.network.automation.model.HueLightState;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.util.LinkedMultiValueMap;
@@ -62,31 +62,66 @@ public class PhilipsHueBridge extends Device{
                 .build();
     }
 
-    public HueLight getLight(int id){
-        log.info("Get light status for id={}", id);
+    private  <T> T get(String path, Class<T> type){
         Map<String, String> queryParams = new HashMap<>();
-        String path = "api" +"/" + user + "/" + "lights" + "/" + String.valueOf(id);
-        String url = buildURI(path, queryParams).toUriString();
-        HueLight light = null;
+        String fullPath = "api" +"/" + user + "/" + path;
+        String url = buildURI(fullPath, queryParams).toUriString();
+        T obj = null;
         RestTemplate restTemplate = new RestTemplate();
         SimpleClientHttpRequestFactory rf =
                 (SimpleClientHttpRequestFactory) restTemplate.getRequestFactory();
         rf.setReadTimeout(READ_TIMEOUT);
         rf.setConnectTimeout(CONNECT_TIMEOUT);
         try {
-            ResponseEntity<HueLight> response = restTemplate
-                    .getForEntity(url, HueLight.class);
-            light = response.getBody();
+            ResponseEntity<T> response = restTemplate
+                    .getForEntity(url, type);
+            obj = response.getBody();
         } catch (HttpMessageNotReadableException ex)   {
             ParameterizedTypeReference<List<HueBridgeErrorResponse>> list = new ParameterizedTypeReference<List<HueBridgeErrorResponse>>() {};
             ResponseEntity<List<HueBridgeErrorResponse>> response = restTemplate.exchange(url, HttpMethod.GET,null, list);
             List<HueBridgeErrorResponse> errors = response.getBody();
-            log.error("Get light status for id={} returned error: {}", id, errors.get(0).getError().getDescription());
+            log.error("Get for {} returned error: {}", type, errors.get(0).getError().getDescription());
         } catch (RestClientException ex){
-            log.error("Get light status for id={} returned exception: {}", id, ex.getMessage());
+            log.error("Get for {} returned exception: {}", type, ex.getMessage());
         }
 
-        return light;
+        return obj;
+    }
+
+    private String put(String path, Object request){
+        Map<String, String> queryParams = new HashMap<>();
+        String fullPath = "api" +"/" + user + "/" + path;
+        String url = buildURI(fullPath, queryParams).toUriString();
+        RestTemplate restTemplate = new RestTemplate();
+        SimpleClientHttpRequestFactory rf =
+                (SimpleClientHttpRequestFactory) restTemplate.getRequestFactory();
+        rf.setReadTimeout(READ_TIMEOUT);
+        rf.setConnectTimeout(CONNECT_TIMEOUT);
+
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Object> entity = new HttpEntity<Object>(request, headers);
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
+
+            return response.getBody();
+        }
+        catch (RestClientException ex){
+            log.error("Put for path {} and body {} returned exception: {}", path, request, ex.getMessage());
+            return "Error: " + ex.getMessage();
+        }
+    }
+
+    public HueLight getLight(int id){
+        log.debug("Get light status for id={}", id);
+        String path = "lights" + "/" + String.valueOf(id);
+        return get(path, HueLight.class);
+    }
+
+    public String setLight(int id, HueLightState state){
+        log.debug("Set light id={} state {}", id, state);
+        String path = "lights" + "/" + String.valueOf(id) + "/" + "state";
+        return put(path, state);
     }
 
 }

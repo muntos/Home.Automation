@@ -18,8 +18,8 @@ import java.util.Map;
 @Slf4j
 @Getter
 public class BroadlinkBridge {
-    private final int READ_TIMEOUT = 2000;
-    private final int CONNECT_TIMEOUT = 2000;
+    private final int READ_TIMEOUT = 3000;
+    private final int CONNECT_TIMEOUT = 3000;
 
     private String protocol;
     private String address;

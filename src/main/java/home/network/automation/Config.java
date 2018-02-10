@@ -47,9 +47,9 @@ public class Config {
                                 .addButton(new Button(4, "VolumeUp", "Volume Up").mapsTo(Button.Mapping.VOLUME_UP))
                                 .addButton(new Button(3, "VolumeDown", "Volume Down").mapsTo(Button.Mapping.VOLUME_DOWN)))
             .addDevice(new ElectricCurtain("Electric curtain for Living room", "curtainLivingRoom", 30, 20)
-                                .addButton(new Button(5, "close", "Curtain close").mapsTo(Button.Mapping.CURTAIN_LIVINGROOM_CLOSE))
-                                .addButton(new Button(6, "open", "Curtain open").mapsTo(Button.Mapping.CURTAIN_LIVINGROOM_OPEN))
-                                .addButton(new Button(7, "stop", "Curtain stop").mapsTo(Button.Mapping.CURTAIN_LIVINGROOM_STOP)))
+                                .addButton(new Button(8, "close", "Curtain close").mapsTo(Button.Mapping.CURTAIN_LIVINGROOM_CLOSE))
+                                .addButton(new Button(11, "open", "Curtain open").mapsTo(Button.Mapping.CURTAIN_LIVINGROOM_OPEN))
+                                .addButton(new Button(10, "stop", "Curtain stop").mapsTo(Button.Mapping.CURTAIN_LIVINGROOM_STOP)))
             .addDevice(new RemoteControlledDevice("LG OLED TV", "TV")
                                 .addButton(new Button(0, "chUp", "Channel Up"))
                                 .addButton(new Button(0, "chDown", "Channel Down")));
