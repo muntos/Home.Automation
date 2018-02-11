@@ -1,9 +1,21 @@
 $(document).ready(function() {
 
-    ajaxGet();
+    displayLog();
 
-    // DO GET
-    function ajaxGet(){
+    $("#clearLog").click(function(){
+       clearLog();
+    });
+
+    function clearLog() {
+        $.ajax({type: "DELETE",
+            url: "/home/info/log",
+            success:function(result){
+                location.reload();
+                //displayLog();
+            }});
+    }
+
+    function displayLog(){
         $.ajax({
             type : "GET",
             url : "/home/info/log",

@@ -8,4 +8,5 @@ import java.util.List;
 public interface InfoService {
     List<Log> displayLog();
     List<ILoggingEvent >getEvents();
+    void clearLog();
 }

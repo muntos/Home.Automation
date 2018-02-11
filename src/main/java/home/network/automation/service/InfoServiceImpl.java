@@ -27,4 +27,9 @@ public class InfoServiceImpl implements InfoService {
     public List<ILoggingEvent> getEvents() {
         return events;
     }
+
+    @Override
+    public void clearLog() {
+        events.clear();;
+    }
 }
