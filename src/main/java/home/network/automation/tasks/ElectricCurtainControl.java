@@ -37,8 +37,10 @@ public class ElectricCurtainControl implements KodiListener {
 
     @Override
     public void eventReceived(Kodi.Event event) {
-        log.info("Curtain control received Kodi event {}", event);
-        controlLivingRoomCurtain(event);
+        if (event == Kodi.Event.PLAY_STARTED || event == Kodi.Event.PLAY_ENDED) {
+            log.info("Curtain control received Kodi event {}", event);
+            controlLivingRoomCurtain(event);
+        }
     }
 
     private void controlLivingRoomCurtain(Kodi.Event event){
