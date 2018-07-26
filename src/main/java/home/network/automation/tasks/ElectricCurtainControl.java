@@ -4,6 +4,7 @@ import home.network.automation.components.Kodi;
 import home.network.automation.components.KodiListener;
 import home.network.automation.devices.ElectricCurtain;
 import home.network.automation.devices.RemoteControlledDevice;
+import home.network.automation.devices.SmartPlug;
 import home.network.automation.model.Button;
 import home.network.automation.observer.House;
 import home.network.automation.service.CommandsService;
@@ -67,6 +68,17 @@ public class ElectricCurtainControl implements KodiListener {
 
         switch (event){
             case PLAY_STARTED:
+                //ugly hack to get the window sensor status => sensor is in sync with a smart plug, so get the plug status
+                String plugName = "SP3_Window";
+                SmartPlug smartPlug = house.getDevice(plugName);
+                if (smartPlug == null){
+                    log.error("Could not find any smart plug named '{}', check your configuration!", plugName);
+                }
+                SmartPlug.Status status = smartPlug.getStatus();
+                if (SmartPlug.Status.ON == status ){
+                    log.warn("{} is OPEN, will not continue!", plugName);
+                    return;
+                }
                 scheduleCurtainAction(curtain, curtainClose, curtain.getWaitOnEventBeforeClose());
                 break;
             case PLAY_ENDED:

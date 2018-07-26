@@ -15,6 +15,9 @@ public class Config {
     @Value("${sp3.h80.mac}")
     private String sp3forH80Mac;
 
+    @Value("${sp3.window.mac}")
+    private String sp3forWindow;
+
     @Value("${rm.bridge.protocol}")
     private String rmBridgeProtocol;
 
@@ -39,6 +42,7 @@ public class Config {
         House house = new House();
         house
             .addDevice(new SmartPlug("Broadlink SP3 connected to Hegel H80 amplifier","SP3_H80", sp3forH80Mac, broadlinkBridge, 60, 60))
+            .addDevice(new SmartPlug("Broadlink SP3 mini martor for window sensor", "SP3_Window", sp3forWindow, broadlinkBridge, 0, 0))
             .addDevice(new BroadlinkHub("Broadlink RM-PRO", "RMPRO", rmProMac, broadlinkBridge))
             .addDevice(new HarmonyHub("Logitech Harmony Elite", "Harmony", harmonyAddress, 100))
             .addDevice(new PhilipsHueBridge("Philips Hue Bridge", "Hue", hueBridgeAddress, hueBridgeUserName))
