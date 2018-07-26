@@ -74,7 +74,7 @@ public class ElectricCurtainControl implements KodiListener {
                 if (smartPlug == null){
                     log.error("Could not find any smart plug named '{}', check your configuration!", plugName);
                 }
-                SmartPlug.Status status = smartPlug.getStatus();
+                SmartPlug.Status status = (smartPlug == null) ? SmartPlug.Status.UNKNOWN : smartPlug.getStatus();
                 if (SmartPlug.Status.ON == status ){
                     log.warn("{} is OPEN, will not continue!", plugName);
                     return;
