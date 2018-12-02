@@ -1,6 +1,10 @@
 package home.network.automation;
 
 import home.network.automation.devices.*;
+import home.network.automation.devices.api.BroadlinkBridge;
+import home.network.automation.devices.broadlink.A1Sensor;
+import home.network.automation.devices.broadlink.BroadlinkHub;
+import home.network.automation.devices.broadlink.SmartPlug;
 import home.network.automation.model.Button;
 import home.network.automation.observer.House;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +40,9 @@ public class Config {
     @Value("${philips.bridge.username}")
     private String hueBridgeUserName;
 
+    @Value("${a1.balcony.living.mac}")
+    private String a1forLivingBalcony;
+
     @Bean
     House house(){
         BroadlinkBridge broadlinkBridge = new BroadlinkBridge(rmBridgeProtocol, rmBridgeAddress, rmBridgePort);
@@ -56,7 +63,8 @@ public class Config {
                                 .addButton(new Button(10, "stop", "Curtain stop").mapsTo(Button.Mapping.CURTAIN_LIVINGROOM_STOP)))
             .addDevice(new RemoteControlledDevice("LG OLED TV", "TV")
                                 .addButton(new Button(0, "chUp", "Channel Up"))
-                                .addButton(new Button(0, "chDown", "Channel Down")));
+                                .addButton(new Button(0, "chDown", "Channel Down")))
+            .addDevice(new A1Sensor("Broadlink A1 Sensor in Livingroom Balcony", "A1_Balcony_Living", a1forLivingBalcony, broadlinkBridge));
 
         return house;
     }

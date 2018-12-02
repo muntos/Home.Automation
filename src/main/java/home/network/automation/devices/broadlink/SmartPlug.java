@@ -1,5 +1,7 @@
-package home.network.automation.devices;
+package home.network.automation.devices.broadlink;
 
+import home.network.automation.devices.Device;
+import home.network.automation.devices.api.BroadlinkBridge;
 import home.network.automation.model.CommandResult;
 import home.network.automation.model.SmartPlugResponse;
 import lombok.Getter;
@@ -11,8 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.*;
 
-import static home.network.automation.devices.SmartPlug.Status.OFF;
-import static home.network.automation.devices.SmartPlug.Status.ON;
+import static home.network.automation.devices.broadlink.SmartPlug.Status.OFF;
+import static home.network.automation.devices.broadlink.SmartPlug.Status.ON;
 
 @Slf4j
 public class SmartPlug extends Device {
@@ -68,7 +70,7 @@ public class SmartPlug extends Device {
 
     public Status getStatus(){
         Status status = Status.UNKNOWN;
-        SmartPlugResponse response = broadlinkBridge.getStatus(name, macAddress, SmartPlugResponse.class);
+        SmartPlugResponse response = broadlinkBridge.getStatus(name, macAddress, "status", SmartPlugResponse.class);
         if (response != null){
             if (response.getStatus().equals(SmartPlugResponse.status.ok)){
                 status = value(response.getOnOffStatus());

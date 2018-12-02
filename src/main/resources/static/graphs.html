@@ -1,0 +1,94 @@
+<html>
+<head>
+    <title>Home Automation - Charts</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+</head>
+
+<body>
+<div style="width:80%">
+    <canvas id="LivingBalconyChart" height="500" width="1000"></canvas>
+</div>
+
+<script>
+
+    var ctx = document.getElementById('LivingBalconyChart').getContext('2d');
+
+
+    var aLabels = [];
+    var aDatasetTemp = [];
+    var aDatasetTempOutside = [];
+    var aDatasetHumidity = [];
+
+    var dataT = {
+        labels: aLabels,
+        datasets: [{
+            label: "Balcony temperature",
+            data: aDatasetTemp,
+            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            borderColor: "rgb(54, 162, 235)",
+            borderWidth: 1
+        },
+        {
+            label: "Humidity",
+            data: aDatasetHumidity,
+            //backgroundColor: "rgba(54, 62, 235, 0.2)",
+            fill: false,
+            borderColor: "rgb(54, 62, 235)",
+            borderWidth: 1
+        },
+        {
+            label: "Outside temperature",
+            data: aDatasetTempOutside,
+            backgroundColor: "rgba(255, 0, 0, 0.2)",
+            borderColor: "rgb(255, 0, 0)",
+            borderWidth: 1
+        }]
+    };
+
+    var opt = {
+        responsive: true,
+        title: { display: true, text: 'Living Balcony' },
+        legend: { position: 'bottom' }
+    };
+
+
+
+    $.getJSON("/home/reading/balcony/temp?period=today", function(readings) {
+        $.each(readings, function(index, reading){
+            aLabels.push(reading.date);
+            aDatasetTemp.push(reading.value);
+        });
+
+
+
+        $.getJSON("/home/reading/balcony/humidity?period=today", function(readings) {
+            $.each(readings, function(index, reading){
+
+                aDatasetHumidity.push(reading.value);
+            });
+
+            $.getJSON("/home/reading/outside/temp?period=today", function(readings) {
+                $.each(readings, function(index, reading){
+
+                    aDatasetTempOutside.push(reading.value);
+                });
+
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: dataT,
+                    options: opt
+                });
+
+            });
+
+
+
+        });
+
+    });
+
+</script>
+
+</body>
+</html>

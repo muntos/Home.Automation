@@ -1,7 +1,7 @@
 package home.network.automation.tasks;
 
 import home.network.automation.devices.HarmonyHub;
-import home.network.automation.devices.SmartPlug;
+import home.network.automation.devices.broadlink.SmartPlug;
 import home.network.automation.observer.House;
 import lombok.extern.slf4j.Slf4j;
 import net.whistlingfish.harmony.ActivityChangeListener;
@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
-import static home.network.automation.devices.SmartPlug.Status.OFF;
-import static home.network.automation.devices.SmartPlug.Status.ON;
+import static home.network.automation.devices.broadlink.SmartPlug.Status.OFF;
+import static home.network.automation.devices.broadlink.SmartPlug.Status.ON;
 
 @Slf4j
 @Component

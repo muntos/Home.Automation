@@ -4,7 +4,7 @@ import home.network.automation.components.Kodi;
 import home.network.automation.components.KodiListener;
 import home.network.automation.devices.ElectricCurtain;
 import home.network.automation.devices.RemoteControlledDevice;
-import home.network.automation.devices.SmartPlug;
+import home.network.automation.devices.broadlink.SmartPlug;
 import home.network.automation.model.Button;
 import home.network.automation.observer.House;
 import home.network.automation.service.CommandsService;

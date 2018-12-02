@@ -1,5 +1,7 @@
-package home.network.automation.devices;
+package home.network.automation.devices.broadlink;
 
+import home.network.automation.devices.RemoteControlDevice;
+import home.network.automation.devices.api.BroadlinkBridge;
 import home.network.automation.model.BroadlinkBridgeResponse;
 import home.network.automation.model.Button;
 import home.network.automation.model.CommandResult;
