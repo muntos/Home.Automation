@@ -13,6 +13,12 @@
     <button id="week" class="button">
         Week
     </button>
+    <button id="month" class="button">
+        Month
+    </button>
+    <button id="year" class="button">
+        Year
+    </button>
 </div>
 <div style="width:80%">
     <canvas id="LivingBalconyChart" height="500" width="1000"></canvas>
@@ -21,7 +27,6 @@
 <script>
 
     var ctx = document.getElementById('LivingBalconyChart').getContext('2d');
-
 
     var aLabels = [];
     var aDatasetTemp = [];
@@ -62,59 +67,87 @@
     };
 
 
+    $.when(getReadings('balcony', 'temp', 'today'),
+        getReadings('balcony', 'humidity', 'today'),
+        getReadings('outside', 'temp', 'today')
+    ).done(function (b_t_args, b_h_args, o_t_args) {
 
-    $.getJSON("/home/reading/balcony/temp?period=today", function(readings) {
-        $.each(readings, function(index, reading){
+        $.each(b_t_args[0], function(index, reading){
             aLabels.push(reading.date);
             aDatasetTemp.push(reading.value);
         });
 
+        $.each(b_h_args[0], function(index, reading){
+            aDatasetHumidity.push(reading.value);
+        });
 
+        $.each(o_t_args[0], function(index, reading){
+            aDatasetTempOutside.push(reading.value);
+        });
 
-        $.getJSON("/home/reading/balcony/humidity?period=today", function(readings) {
-            $.each(readings, function(index, reading){
-
-                aDatasetHumidity.push(reading.value);
-            });
-
-            $.getJSON("/home/reading/outside/temp?period=today", function(readings) {
-                $.each(readings, function(index, reading){
-
-                    aDatasetTempOutside.push(reading.value);
-                });
-
-                myChart = new Chart(ctx, {
-                    type: 'line',
-                    data: dataT,
-                    options: opt
-                });
-
-            });
-
+        myChart = new Chart(ctx, {
+            type: 'line',
+            data: dataT,
+            options: opt
         });
 
     });
 
 
     $("#day").click(function(){
-        console.log("Day click");
+        updateChartForBalcony('day');
+    });
 
-        $.getJSON("/home/reading/balcony/temp?period=year", function(readings) {
-            aLabels = [];
-            aDatasetTemp = [];
-            $.each(readings, function (index, reading) {
+    $("#week").click(function(){
+        updateChartForBalcony('week');
+    });
+
+    $("#month").click(function(){
+        updateChartForBalcony('month');
+    });
+
+    $("#year").click(function(){
+        updateChartForBalcony('year');
+    });
+
+    function getReadings(location, sensor, period){
+        var url = '/home/reading/' + location + '/' + sensor + '?period=' + period;
+        return $.getJSON(url);
+    }
+
+    function updateChartForBalcony(period){
+        aLabels = [];
+        aDatasetTemp = [];
+        aDatasetHumidity = [];
+        aDatasetHumidity = [];
+
+        $.when(getReadings('balcony', 'temp', period),
+            getReadings('balcony', 'humidity', period),
+            getReadings('outside', 'temp', period)
+        ).done(function (b_t_args, b_h_args, o_t_args) {
+
+            $.each(b_t_args[0], function(index, reading){
                 aLabels.push(reading.date);
                 aDatasetTemp.push(reading.value);
             });
 
-            console.log(aDatasetTemp);
+            $.each(b_h_args[0], function(index, reading){
+                aDatasetHumidity.push(reading.value);
+            });
 
+            $.each(o_t_args[0], function(index, reading){
+                aDatasetTempOutside.push(reading.value);
+            });
+
+            myChart.data.labels = aLabels;
             myChart.data.datasets[0].data = aDatasetTemp;
+            myChart.data.datasets[1].data = aDatasetHumidity;
+            myChart.data.datasets[2].data = aDatasetTempOutside;
             myChart.update();
 
         });
 
-    });
+    }
 
 </script>
 
