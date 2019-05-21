@@ -67,15 +67,14 @@ public class OpenWeatherMap extends Api{
         return Optional.ofNullable(map.get(city));
     }
 
-    public Boolean isRainInForecast(int numberOfDaysInFuture) {
-        String city = "Bucharest";
+    public Boolean isRainInForecast(String city, int numberOfDaysInFuture) {
         Optional<OpenWeatherMapForecastResponse> forecastWeather = getForecastWeather(city);
 
         if (forecastWeather.isPresent()) {
 
             DateTimeZone timeZone = DateTimeZone.forID("Europe/" + city);
             DateTime dayForTheForecast = new DateTime(timeZone).plusDays(numberOfDaysInFuture);
-            Interval intervalForTheForecast = new Interval( dayForTheForecast.withTimeAtStartOfDay(), dayForTheForecast.plusDays(1).withTimeAtStartOfDay() );
+            Interval intervalForTheForecast = new Interval( dayForTheForecast, dayForTheForecast.plusDays(1).withTimeAtStartOfDay() );
 
             for (OpenWeatherMapForecastList item : forecastWeather.get().getList()) {
                 DateTime forecastedTime = new DateTime(item.getDt() * 1000).withZone(timeZone);
