@@ -40,11 +40,6 @@ public class HueLightsControl implements KodiListener {
                 onState.setHue(0);
                 onState.setSaturation(0);
                 bridge.setLight(1, onState);
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 bridge.setLight(2, onState);
                 break;
             case PLAY_STARTED:
