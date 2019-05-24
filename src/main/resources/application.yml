@@ -1,0 +1,80 @@
+server:
+    contextPath: /home
+    port: 8888
+
+spring:
+    profiles:
+        active: dev
+
+
+
+a1:
+    balcony:
+        living:
+            mac: 34:ea:34:c7:61:f8
+hegel:
+    h80:
+        initialVolume: 30
+logitech:
+    harmony:
+        address: 192.168.1.170
+open:
+    weather:
+        map:
+            api:
+                address: api.openweathermap.org
+                cities: '{''Bucharest'':683506}'
+                key: d233224e28cc867dd88f274bccbc96c0
+                port: 80
+                protocol: http
+philips:
+    bridge:
+        address: 192.168.1.169
+        username: nJCp1QzRfxjkJ2GKVJYbBo0PRyQVZ5S5rTCq23Ot
+rm:
+    bridge:
+        address: 192.168.1.98
+        port: 9876
+        protocol: http
+rmpro:
+    mac: 34:ea:34:bb:1b:9c
+
+
+
+sp3:
+    h80:
+        mac: 34:ea:34:9d:2a:50
+    window:
+        mac: 34:ea:34:59:6a:f7
+
+
+
+---
+
+spring:
+    profiles: prod
+    datasource:
+        driver-class-name: org.mariadb.jdbc.Driver
+        password: Home_solaris987
+        url: jdbc:mariadb://192.168.1.100:3306/home_automation
+        username: home
+        jpa:
+            hibernate:
+                ddl-auto: validate
+
+---
+
+spring:
+    profiles: dev
+    datasource:
+        driver-class-name: org.h2.Driver
+        password: ''
+        url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+        username: sa
+        jpa:
+            hibernate:
+                ddl-auto: update
+            properties:
+                hibernate:
+                    dialect: org.hibernate.dialect.H2Dialect
+            show-sql: true

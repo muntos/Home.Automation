@@ -1,6 +1,5 @@
-package home.network.automation.tasks;
+package home.network.automation.jobs;
 
-import home.network.automation.devices.HarmonyHub;
 import home.network.automation.devices.api.OpenWeatherMap;
 import home.network.automation.devices.broadlink.A1Sensor;
 import home.network.automation.entity.EnvironmentReading;
@@ -11,46 +10,26 @@ import home.network.automation.model.Sensor;
 import home.network.automation.observer.House;
 import home.network.automation.repository.EnvironmentReadingRepository;
 import lombok.extern.slf4j.Slf4j;
-import net.whistlingfish.harmony.HarmonyClient;
-import net.whistlingfish.harmony.config.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Optional;
 
-
-@Component
+@Profile("prod")
 @Slf4j
-public class ScheduledTasks {
-    private HarmonyClient harmonyClient;
-
+@Component
+public class SaveEnvironmentReadingsJob {
     @Autowired
     private House house;
 
     @Autowired
-    private EnvironmentReadingRepository environmentReadingRepository;
-
-    @Autowired
     private OpenWeatherMap openWeatherMap;
 
-    @Scheduled(fixedDelay = 30000)
-    public void checkHarmonyStatus() {
-        HarmonyHub harmonyHub = house.getDevice("Harmony");
-        harmonyClient = harmonyHub.getHarmonyClient();
-        try {
-            Activity currentActivity = harmonyClient.getCurrentActivity();
-        }catch (RuntimeException ex){
-            log.error("Error when trying to check Harmony Hub status: {}", ex.getMessage());
-            log.info("Trying to reconnect to Harmony Hub {}", harmonyHub.getAddress());
-            try{
-                harmonyClient.connect(harmonyHub.getAddress());
-            } catch (RuntimeException e){
-                log.warn("Failed connecting to Harmony Hub {} error is: {}", harmonyHub.getAddress(), e.getMessage());
-            }
-        }
-    }
+    @Autowired
+    private EnvironmentReadingRepository environmentReadingRepository;
 
     @Scheduled(fixedDelay = 3600000)
     public void saveEnvironmentReadings(){
@@ -85,5 +64,4 @@ public class ScheduledTasks {
         log.info("Saving reading: {}", environmentReading);
         environmentReadingRepository.save(environmentReading);
     }
-
 }
