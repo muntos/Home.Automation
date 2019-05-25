@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>home.network</groupId>
-	<artifactId>automation</artifactId>
-	<version>0.3.5</version>
-	<packaging>war</packaging>
+	<artifactId>house.automation</artifactId>
+	<version>0.4.3</version>
+	<packaging>jar</packaging>
 
 	<name>Home Automation</name>
 	<description>Demo project for Spring Boot</description>
@@ -150,8 +150,30 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <configuration>
+                    <repository>muntos/${project.artifactId}</repository>
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>build</goal>
+                            <!--<goal>push</goal>-->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
-        <finalName>home</finalName>
+        <finalName>my-home-automation</finalName>
 	</build>
 
 

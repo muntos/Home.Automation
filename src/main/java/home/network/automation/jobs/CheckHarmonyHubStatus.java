@@ -20,7 +20,7 @@ public class CheckHarmonyHubStatus {
     private House house;
 
     @Scheduled(fixedDelay = 30000)
-    public void checkHarmonyStatus() {
+    public void doJob() {
         HarmonyHub harmonyHub = house.getDevice("Harmony");
         harmonyClient = harmonyHub.getHarmonyClient();
         try {

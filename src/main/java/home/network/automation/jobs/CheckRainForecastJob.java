@@ -15,7 +15,7 @@ public class CheckRainForecastJob {
     @Autowired
     private OpenWeatherMap openWeatherMap;
 
-    @Scheduled(fixedDelay = 30000)
+    @Scheduled(cron = "0 0 */3 ? * *")
     public void doJob() {
         int numberOfDaysInFuture = 1;
         Boolean isRain = openWeatherMap.isRainInForecast("Bucharest", numberOfDaysInFuture);

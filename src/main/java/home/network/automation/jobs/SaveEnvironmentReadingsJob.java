@@ -32,7 +32,7 @@ public class SaveEnvironmentReadingsJob {
     private EnvironmentReadingRepository environmentReadingRepository;
 
     @Scheduled(fixedDelay = 3600000)
-    public void saveEnvironmentReadings(){
+    public void doJob(){
         A1Sensor a1Sensor = house.getDevice("A1_Balcony_Living");
         Date now = new Date();
 
