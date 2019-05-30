@@ -1,9 +1,6 @@
 package home.network.automation.devices.api;
 
-import home.network.automation.model.OpenWeatherMapForecastList;
-import home.network.automation.model.OpenWeatherMapForecastResponse;
-import home.network.automation.model.OpenWeatherMapNowResponse;
-import home.network.automation.model.OpenWeatherMapWeather;
+import home.network.automation.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -55,7 +52,6 @@ public class OpenWeatherMap extends Api{
         Map<String, OpenWeatherMapForecastResponse> map = new HashMap<>();
 
         cities.forEach((key, value) -> {
-            log.info("Get forecast weather for city {}", key);
             try {
                 map.put(key, get(API_PATH + "forecast", getQueryParams(value.toString()), OpenWeatherMapForecastResponse.class));
             }catch (RestClientException ex){
@@ -67,13 +63,18 @@ public class OpenWeatherMap extends Api{
         return Optional.ofNullable(map.get(city));
     }
 
-    public Boolean isRainInForecast(String city, int numberOfDaysInFuture) {
+    public Optional<ForecastWeather> isRainInForecast(String city, int numberOfDaysInFuture) {
         Optional<OpenWeatherMapForecastResponse> forecastWeather = getForecastWeather(city);
 
         if (forecastWeather.isPresent()) {
-
+            DateTime dayForTheForecast;
             DateTimeZone timeZone = DateTimeZone.forID("Europe/" + city);
-            DateTime dayForTheForecast = new DateTime(timeZone).plusDays(numberOfDaysInFuture);
+            if (numberOfDaysInFuture == 0) {
+                dayForTheForecast = new DateTime(timeZone).plusDays(numberOfDaysInFuture);
+            }
+            else {
+                dayForTheForecast = new DateTime(timeZone).withTimeAtStartOfDay().plusDays(numberOfDaysInFuture);
+            }
             Interval intervalForTheForecast = new Interval( dayForTheForecast, dayForTheForecast.plusDays(1).withTimeAtStartOfDay() );
 
             for (OpenWeatherMapForecastList item : forecastWeather.get().getList()) {
@@ -83,14 +84,13 @@ public class OpenWeatherMap extends Api{
                             .filter(x -> x.getId() >= 500 && x.getId() < 600)
                             .findFirst();
                     if (weather.isPresent()) {
-                        return true;
+                        return Optional.of(new ForecastWeather(weather.get().getMain(), weather.get().getDescription(), forecastedTime));
                     }
-
                 }
             }
         }
 
-        return false;
+        return Optional.empty();
     }
 
     private Map<String, String> getQueryParams(String id) {

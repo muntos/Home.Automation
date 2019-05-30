@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Profile("prod")
 @Slf4j
 @Component
-public class CheckHarmonyHubStatus {
+public class CheckHarmonyHubStatusJob {
     private HarmonyClient harmonyClient;
 
     @Autowired

@@ -6,7 +6,8 @@ spring:
     profiles:
         active: dev
 
-
+house:
+    location: Bucharest
 
 a1:
     balcony:

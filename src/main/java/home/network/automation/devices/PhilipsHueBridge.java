@@ -1,8 +1,11 @@
 package home.network.automation.devices;
 
-import home.network.automation.model.HueBridgeErrorResponse;
-import home.network.automation.model.HueLight;
-import home.network.automation.model.HueLightState;
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import home.network.automation.model.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -16,13 +19,26 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Slf4j
 @Getter
-public class PhilipsHueBridge extends Device{
+public class PhilipsHueBridge extends Device {
+    private static final String API_PATH = "api";
+    private static final String LIGHTS_PATH = "lights";
+    private static final String STATE_PATH = "state";
+    private static final String SENSORS_PATH = "sensors";
+
+    private static final Map<String, Class> sensorMappings = ImmutableMap.of
+                   ("ZLLPresence", HueMotionSensor.class,
+                    "ZLLLightLevel", HueAmbientLightSensor.class
+                   );
+
+    private Map<String, HueSensor> sensors;
+
     private final int READ_TIMEOUT = 2000;
     private final int CONNECT_TIMEOUT = 2000;
 
@@ -39,7 +55,7 @@ public class PhilipsHueBridge extends Device{
         this.user = user;
     }
 
-    public PhilipsHueBridge(String name, String shortName, String address, String user){
+    public PhilipsHueBridge(String name, String shortName, String address, String user) {
         super(name, shortName);
         this.address = address;
         this.user = user;
@@ -47,7 +63,7 @@ public class PhilipsHueBridge extends Device{
         this.port = 80;
     }
 
-    private UriComponents buildURI(String path, Map<String, String> queryParams){
+    private UriComponents buildURI(String path, Map<String, String> queryParams) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         for (Map.Entry<String, String> entry : queryParams.entrySet()) {
             params.add(entry.getKey(), entry.getValue());
@@ -62,9 +78,9 @@ public class PhilipsHueBridge extends Device{
                 .build();
     }
 
-    private  <T> T get(String path, Class<T> type){
+    private  <T> T get(String path, Class<T> type) {
         Map<String, String> queryParams = new HashMap<>();
-        String fullPath = "api" +"/" + user + "/" + path;
+        String fullPath = API_PATH +"/" + user + "/" + path;
         String url = buildURI(fullPath, queryParams).toUriString();
         T obj = null;
         RestTemplate restTemplate = new RestTemplate();
@@ -88,9 +104,9 @@ public class PhilipsHueBridge extends Device{
         return obj;
     }
 
-    private String put(String path, Object request){
+    private String put(String path, Object request) {
         Map<String, String> queryParams = new HashMap<>();
-        String fullPath = "api" +"/" + user + "/" + path;
+        String fullPath = API_PATH +"/" + user + "/" + path;
         String url = buildURI(fullPath, queryParams).toUriString();
         RestTemplate restTemplate = new RestTemplate();
         SimpleClientHttpRequestFactory rf =
@@ -112,16 +128,44 @@ public class PhilipsHueBridge extends Device{
         }
     }
 
-    public HueLight getLight(int id){
+    public HueLight getLight(int id) {
         log.debug("Get light status for id={}", id);
-        String path = "lights" + "/" + String.valueOf(id);
+        String path = LIGHTS_PATH + "/" + String.valueOf(id);
         return get(path, HueLight.class);
     }
 
-    public String setLight(int id, HueLightState state){
+    public String setLight(int id, HueLightState state) {
         log.debug("Set light id={} state {}", id, state);
-        String path = "lights" + "/" + String.valueOf(id) + "/" + "state";
+        String path = LIGHTS_PATH + "/" + String.valueOf(id) + "/" + STATE_PATH;
         return put(path, state);
+    }
+
+    private Map<String, HueSensor> getSensors() {
+        if (sensors != null) {
+            return sensors;
+        }
+        sensors = new HashMap<>();
+        String path = SENSORS_PATH;
+        String jsonString = get(path, String.class);
+        JsonObject jsonObject = new JsonParser().parse(jsonString).getAsJsonObject();
+
+        for(Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
+            JsonElement jsonElement = entry.getValue();
+            String sensorType = ((JsonObject) jsonElement).getAsJsonPrimitive("type").getAsString();
+            if (sensorMappings.containsKey(sensorType)) {
+                Gson gson = new Gson();
+                HueSensor hueSensor = (HueSensor) gson.fromJson(jsonElement, sensorMappings.get(sensorType));
+                hueSensor.setId(Integer.valueOf(entry.getKey()));
+                sensors.put(hueSensor.getName(), hueSensor);
+            }
+        }
+
+        return sensors;
+    }
+
+    public <T extends HueSensor> T getSensor(String sensorName, Class<T> type) {
+        String path = SENSORS_PATH + "/" + getSensors().get(sensorName).getId();;
+        return get(path, type);
     }
 
 }

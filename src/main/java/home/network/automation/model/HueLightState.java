@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
@@ -19,13 +21,12 @@ public class HueLightState {
     private String alert;
     private String effect;
     private Boolean reachable;
+    private Float[] xy;
 
     @JsonProperty("sat")
     private Integer saturation;
 
     @JsonProperty("bri")
     private Integer brightness;
-
-
 
 }
