@@ -3,7 +3,7 @@ package home.network.automation.tasks;
 import home.network.automation.components.Kodi;
 import home.network.automation.components.KodiListener;
 import home.network.automation.devices.PhilipsHueBridge;
-import home.network.automation.model.HueLightState;
+import home.network.automation.model.PhilipsHue.HueLightState;
 import home.network.automation.observer.House;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

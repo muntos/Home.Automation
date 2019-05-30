@@ -1,6 +1,7 @@
-package home.network.automation.model;
+package home.network.automation.model.Broadlink;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import home.network.automation.model.PhilipsHue.BroadlinkBridgeResponse;
 import lombok.Getter;
 
 @Getter

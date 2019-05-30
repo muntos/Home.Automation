@@ -2,7 +2,7 @@ package home.network.automation.devices.broadlink;
 
 import home.network.automation.devices.Device;
 import home.network.automation.devices.api.BroadlinkBridge;
-import home.network.automation.model.A1SensorResponse;
+import home.network.automation.model.PhilipsHue.A1SensorResponse;
 
 import java.util.Optional;
 

@@ -1,11 +1,14 @@
 package home.network.automation.devices.api;
 
 import home.network.automation.model.*;
+import home.network.automation.model.OpenWeatherMap.OpenWeatherMapForecastList;
+import home.network.automation.model.OpenWeatherMap.OpenWeatherMapForecastResponse;
+import home.network.automation.model.OpenWeatherMap.OpenWeatherMapNowResponse;
+import home.network.automation.model.OpenWeatherMap.OpenWeatherMapWeather;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Interval;
-import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;

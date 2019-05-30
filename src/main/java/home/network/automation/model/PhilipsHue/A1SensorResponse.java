@@ -1,4 +1,4 @@
-package home.network.automation.model;
+package home.network.automation.model.PhilipsHue;
 
 import lombok.Getter;
 

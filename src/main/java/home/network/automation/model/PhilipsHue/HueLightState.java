@@ -1,4 +1,4 @@
-package home.network.automation.model;
+package home.network.automation.model.PhilipsHue;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

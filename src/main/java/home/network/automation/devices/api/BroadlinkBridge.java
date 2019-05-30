@@ -1,6 +1,6 @@
 package home.network.automation.devices.api;
 
-import home.network.automation.model.BroadlinkBridgeResponse;
+import home.network.automation.model.PhilipsHue.BroadlinkBridgeResponse;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestClientException;
