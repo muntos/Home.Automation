@@ -3,7 +3,7 @@ package home.network.automation.devices.broadlink;
 import home.network.automation.devices.Device;
 import home.network.automation.devices.api.BroadlinkBridge;
 import home.network.automation.model.CommandResult;
-import home.network.automation.model.SmartPlugResponse;
+import home.network.automation.model.Broadlink.SmartPlugResponse;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
