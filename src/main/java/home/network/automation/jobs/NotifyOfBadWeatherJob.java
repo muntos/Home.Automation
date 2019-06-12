@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Profile({"prod", "dev"})
+@Profile({"prod"})
 @Slf4j
 @Component
 public class NotifyOfBadWeatherJob {

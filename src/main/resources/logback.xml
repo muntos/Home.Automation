@@ -16,7 +16,7 @@
 
     <logger name="home.network.automation" level="debug"/>
 
-    <springProfile name="dev">
+    <springProfile name="dev,local">
         <root level="info">
             <appender-ref ref="STDOUT"/>
         </root>

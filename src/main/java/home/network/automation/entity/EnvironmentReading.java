@@ -7,6 +7,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Getter
@@ -34,5 +36,11 @@ public class EnvironmentReading {
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+
+    public LocalDate getDateWithoutHour(){
+       return date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
 
 }

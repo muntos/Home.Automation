@@ -53,7 +53,7 @@ sp3:
 ---
 
 spring:
-    profiles: prod
+    profiles: prod, local
     datasource:
         driver-class-name: org.mariadb.jdbc.Driver
         password: Home_solaris987

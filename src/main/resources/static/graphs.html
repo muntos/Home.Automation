@@ -20,19 +20,29 @@
         Year
     </button>
 </div>
-<div style="width:80%">
-    <canvas id="LivingBalconyChart" height="500" width="1000"></canvas>
+<div id="chartDay" style="width:80%">
+    <canvas id="LivingBalconyChartDay" height="500" width="1000"></canvas>
+</div>
+<div id="chartMultiDay" style="width:80%">
+    <canvas id="LivingBalconyChartMultiDay" height="500" width="1000"></canvas>
 </div>
 
 <script>
 
-    var ctx = document.getElementById('LivingBalconyChart').getContext('2d');
+    var ctx = document.getElementById('LivingBalconyChartDay').getContext('2d');
+    var ctxMultiDay = document.getElementById('LivingBalconyChartMultiDay').getContext('2d');
 
     var aLabels = [];
     var aDatasetTemp = [];
+    var aDatasetTempMin = [];
+    var aDatasetDates = [[],[],[],[],[]];
+    var aDatasetTempMax = [];
     var aDatasetTempOutside = [];
+    var aDatasetTempMinOutside = [];
+    var aDatasetTempMaxOutside = [];
     var aDatasetHumidity = [];
     var myChart;
+    var myChartMultiDay;
 
     var dataT = {
         labels: aLabels,
@@ -67,6 +77,80 @@
     };
 
 
+    var dataTMultiDay = {
+        labels: aLabels,
+        datasets: [{
+                label: "Balcony temperature min",
+                data: aDatasetTempMin,
+                backgroundColor: "rgba(54, 162, 235, 0.2)",
+                borderColor: "rgb(54, 162, 235)",
+                borderWidth: 1
+            },
+            {
+                label: "Balcony temperature max",
+                data: aDatasetTempMax,
+                backgroundColor: "rgba(54, 162, 235, 0.2)",
+                borderColor: "rgb(54, 162, 235)",
+                borderWidth: 1
+            },
+            {
+                label: "Humidity",
+                data: aDatasetHumidity,
+                //backgroundColor: "rgba(54, 62, 235, 0.2)",
+                fill: false,
+                borderColor: "rgb(54, 62, 235)",
+                borderWidth: 1
+            },
+            {
+                label: "Outside temperature min",
+                data: aDatasetTempMinOutside,
+                backgroundColor: "rgba(255, 0, 0, 0.2)",
+                borderColor: "rgb(255, 0, 0)",
+                borderWidth: 1
+            },
+            {
+                label: "Outside temperature max",
+                data: aDatasetTempMaxOutside,
+                backgroundColor: "rgba(255, 0, 0, 0.2)",
+                borderColor: "rgb(255, 0, 0)",
+                borderWidth: 1
+            }]
+    };
+
+    var optMultiDay = {
+        responsive: true,
+        title: { display: true, text: 'Living Balcony' },
+        legend: { position: 'bottom' },
+        tooltips: {
+            callbacks: {
+                title: function(tooltipItems, data) {
+                    return aDatasetDates[tooltipItems[0]['datasetIndex']][tooltipItems[0]['index']];
+                },
+                /*label: function(tooltipItem, data) {
+                    console.log(tooltipItem);
+                    console.log(tooltipItem['datasetIndex']);
+                    console.log(tooltipItem['index']);
+                    //return data['datasets'][0]['data'][tooltipItem['index']];
+                    return aDatasetDates[tooltipItem['datasetIndex']][tooltipItem['index']];
+                }*/
+                /*,
+                afterLabel: function(tooltipItem, data) {
+                    console.log(data);
+                    var dataset = data['datasets'][0];
+                    var percent = Math.round((dataset['data'][tooltipItem['index']] / dataset["_meta"][0]['total']) * 100)
+                    return '(' + percent + '%)';
+                }*/
+            },
+            /*backgroundColor: '#FFF',
+            titleFontSize: 16,
+            titleFontColor: '#0066ff',
+            bodyFontColor: '#000',
+            bodyFontSize: 14,
+            displayColors: false*/
+        }
+    };
+
+
     $.when(getReadings('balcony', 'temp', 'today'),
         getReadings('balcony', 'humidity', 'today'),
         getReadings('outside', 'temp', 'today')
@@ -85,10 +169,18 @@
             aDatasetTempOutside.push(reading.value);
         });
 
+        document.getElementById('chartMultiDay').style.display = 'none';
+
         myChart = new Chart(ctx, {
             type: 'line',
             data: dataT,
             options: opt
+        });
+
+        myChartMultiDay = new Chart(ctxMultiDay, {
+            type: 'line',
+            data: dataTMultiDay,
+            options: optMultiDay
         });
 
     });
@@ -99,27 +191,89 @@
     });
 
     $("#week").click(function(){
-        updateChartForBalcony('week');
+        updateMultiDayChartForBalcony('week');
     });
 
     $("#month").click(function(){
-        updateChartForBalcony('month');
+        updateMultiDayChartForBalcony('month');
     });
 
     $("#year").click(function(){
-        updateChartForBalcony('year');
+        updateMultiDayChartForBalcony('year');
     });
 
-    function getReadings(location, sensor, period){
-        var url = '/home/reading/' + location + '/' + sensor + '?period=' + period;
+    function getReadings(location, sensor, period, minMax){
+        var url = '/home/reading/' + location + '/' + sensor + '?period=' + period + '&minMax=' + minMax;
         return $.getJSON(url);
     }
 
+    function updateMultiDayChartForBalcony(period){
+
+        document.getElementById('chartDay').style.display = 'none';
+        document.getElementById('chartMultiDay').style.display = 'block';
+
+        aLabels = [];
+        aDatasetTempMin = [];
+        aDatasetTempMax = [];
+        aDatasetHumidity = [];
+        aDatasetTempMinOutside = [];
+        aDatasetTempMaxOutside = [];
+        aDatasetDates = [[],[],[],[],[]];
+
+        $.when(getReadings('balcony', 'temp', period, "min"),
+            getReadings('balcony', 'temp', period, "max"),
+            getReadings('balcony', 'humidity', period, "max"),
+            getReadings('outside', 'temp', period, "min"),
+            getReadings('outside', 'temp', period, "max")
+        ).done(function (b_t_min_args, b_t_max_args, b_h_args, o_t_min_args, o_t_max_args) {
+
+            $.each(b_t_min_args[0], function(index, reading){
+                aLabels.push(reading.date);
+                aDatasetTempMin.push(reading.value);
+                aDatasetDates[0].push(reading.date);
+            });
+
+            $.each(b_t_max_args[0], function(index, reading){
+                aDatasetTempMax.push(reading.value);
+                aDatasetDates[1].push(reading.date);
+            });
+
+            $.each(b_h_args[0], function(index, reading){
+                aDatasetHumidity.push(reading.value);
+                aDatasetDates[2].push(reading.date);
+            });
+
+            $.each(o_t_min_args[0], function(index, reading){
+                aDatasetTempMinOutside.push(reading.value);
+                aDatasetDates[3].push(reading.date);
+            });
+
+            $.each(o_t_max_args[0], function(index, reading){
+                aDatasetTempMaxOutside.push(reading.value);
+                aDatasetDates[4].push(reading.date);
+            });
+
+            myChartMultiDay.data.labels = aLabels;
+            myChartMultiDay.data.datasets[0].data = aDatasetTempMin;
+            myChartMultiDay.data.datasets[1].data = aDatasetTempMax;
+            myChartMultiDay.data.datasets[2].data = aDatasetHumidity;
+            myChartMultiDay.data.datasets[3].data = aDatasetTempMinOutside;
+            myChartMultiDay.data.datasets[4].data = aDatasetTempMaxOutside;
+
+            myChartMultiDay.update();
+        });
+
+    }
+
+
     function updateChartForBalcony(period){
+        document.getElementById('chartDay').style.display = 'block';
+        document.getElementById('chartMultiDay').style.display = 'none';
+
         aLabels = [];
         aDatasetTemp = [];
         aDatasetHumidity = [];
-        aDatasetHumidity = [];
+        aDatasetTempOutside = [];
 
         $.when(getReadings('balcony', 'temp', period),
             getReadings('balcony', 'humidity', period),
