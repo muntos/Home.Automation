@@ -19,19 +19,24 @@ public class HarmonyHub extends RemoteControlDevice{
     @Getter
     private String address;
 
-    public HarmonyHub(String name, String shortName, String address) {
+    public HarmonyHub(String name, String shortName, String address, Boolean connect) {
         super(name, shortName);
         this.address = address;
         canSendIR = true;
-        connect();
+        if (connect) {
+            connect();
+        }
+
     }
 
-    public HarmonyHub(String name, String shortName, String address, Integer priority) {
+    public HarmonyHub(String name, String shortName, String address, Integer priority, Boolean connect) {
         super(name, shortName);
         this.address = address;
         canSendIR = true;
         setPriority(priority);
-        connect();
+        if (connect) {
+            connect();
+        }
     }
 
     private void connect(){

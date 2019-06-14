@@ -34,6 +34,9 @@ public class Config {
     @Value("${logitech.harmony.address}")
     private String harmonyAddress;
 
+    @Value("${logitech.harmony.connect:false}")
+    private Boolean connectToHub;
+
     @Value("${philips.bridge.address}")
     private String hueBridgeAddress;
 
@@ -51,7 +54,7 @@ public class Config {
             .addDevice(new SmartPlug("Broadlink SP3 connected to Hegel H80 amplifier","SP3_H80", sp3forH80Mac, broadlinkBridge, 60, 60))
             .addDevice(new SmartPlug("Broadlink SP3 mini martor for window sensor", "SP3_Window", sp3forWindow, broadlinkBridge, 0, 0))
             .addDevice(new BroadlinkHub("Broadlink RM-PRO", "RMPRO", rmProMac, broadlinkBridge))
-            .addDevice(new HarmonyHub("Logitech Harmony Elite", "Harmony", harmonyAddress, 100))
+            .addDevice(new HarmonyHub("Logitech Harmony Elite", "Harmony", harmonyAddress, 100, connectToHub))
             .addDevice(new PhilipsHueBridge("Philips Hue Bridge", "Hue", hueBridgeAddress, hueBridgeUserName))
             .addDevice(new AudioDevice("Hegel Amp", "H80", 30, true)
                                 .setPrefferredRemote(house.getDevice("RMPRO"))

@@ -19,6 +19,7 @@ hegel:
 logitech:
     harmony:
         address: 192.168.1.170
+        connect: false
 open:
     weather:
         map:
@@ -79,3 +80,11 @@ spring:
                 hibernate:
                     dialect: org.hibernate.dialect.H2Dialect
             show-sql: true
+
+---
+
+spring:
+    profiles: prod
+logitech:
+    harmony:
+        connect: true
