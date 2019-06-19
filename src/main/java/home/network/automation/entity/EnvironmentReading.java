@@ -2,9 +2,7 @@ package home.network.automation.entity;
 
 import home.network.automation.model.Location;
 import home.network.automation.model.Sensor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,6 +11,8 @@ import java.util.Date;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Entity
 @Table(name = "environment_reading")

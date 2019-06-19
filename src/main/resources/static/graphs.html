@@ -228,7 +228,7 @@
         ).done(function (b_t_min_args, b_t_max_args, b_h_args, o_t_min_args, o_t_max_args) {
 
             $.each(b_t_min_args[0], function(index, reading){
-                aLabels.push(reading.date);
+                aLabels.push(reading.label);
                 aDatasetTempMin.push(reading.value);
                 aDatasetDates[0].push(reading.date);
             });
