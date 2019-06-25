@@ -38,10 +38,11 @@ public class EnvironmentReading {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-    public LocalDate getDateWithoutHour(){
-       return date.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
+    public String getDateWithoutHour(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String sDate = simpleDateFormat.format(date);
+
+        return sDate;
     }
 
     public String getDateWithoutDay() {

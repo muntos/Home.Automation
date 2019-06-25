@@ -30,12 +30,6 @@ public class EnvironmentReadingServiceImpl implements EnvironmentReadingService 
         String dateFormat;
 
         switch (period){
-            case TODAY:
-                startDate = new DateTime().withTimeAtStartOfDay().toDate();
-                gson = new GsonBuilder().setDateFormat("HH:mm").create();
-                labelFormat = "HH:mm";
-                dateFormat = "'%d-%m-%Y'";
-                break;
             case WEEK:
                 startDate = new DateTime().withTimeAtStartOfDay().dayOfWeek().withMinimumValue().toDate();
                 gson = new GsonBuilder().setDateFormat("EEE HH:mm").create();
@@ -54,12 +48,6 @@ public class EnvironmentReadingServiceImpl implements EnvironmentReadingService 
                 labelFormat = "MMM";
                 dateFormat = "'%m-%Y'";
                 break;
-            case CUSTOM:
-                startDate = new DateTime().withTimeAtStartOfDay().toDate();
-                gson = new GsonBuilder().setDateFormat("HH:mm").create();
-                labelFormat = "HH:mm";
-                dateFormat = "'%d-%m-%Y'";
-                break;
             default:
                 startDate = new DateTime().withTimeAtStartOfDay().toDate();
                 gson = new GsonBuilder().setDateFormat("HH:mm").create();
@@ -70,31 +58,8 @@ public class EnvironmentReadingServiceImpl implements EnvironmentReadingService 
         List<EnvironmentReading> readings;
 
         switch (period) {
-            case TODAY:
-                 readings = repository.findAllByLocationAndSensorAndDateAfterOrderByDateAsc(location, sensor, startDate);
-                 break;
             case WEEK:
             case MONTH:
-                if (aggregate.isPresent()) {
-                    List<EnvironmentReading> readingsWithPossibleDuplicates = new ArrayList<>();
-                    switch (aggregate.get()) {
-                        case MIN:
-                            readingsWithPossibleDuplicates = repository.findMinValueGroupByDate(location.toString(), sensor.toString(), startDate, dateFormat);
-                            break;
-                        case MAX:
-                            readingsWithPossibleDuplicates = repository.findMaxValueGroupByDate(location.toString(), sensor.toString(), startDate, dateFormat);
-                            break;
-                    }
-
-                    readings = readingsWithPossibleDuplicates
-                            .stream()
-                            .filter(distinctByKeys(EnvironmentReading::getValue, EnvironmentReading::getDateWithoutHour))
-                            .collect(Collectors.toList());
-                } else {
-                    readings = repository.findAllByLocationAndSensorAndDateAfterOrderByDateAsc(location, sensor, startDate);
-                }
-
-                break;
             case YEAR:
                 if (aggregate.isPresent()) {
                     List<EnvironmentReading> readingsWithPossibleDuplicates = new ArrayList<>();
@@ -107,10 +72,18 @@ public class EnvironmentReadingServiceImpl implements EnvironmentReadingService 
                             break;
                     }
 
-                    readings = readingsWithPossibleDuplicates
-                            .stream()
-                            .filter(distinctByKeys(EnvironmentReading::getValue, EnvironmentReading::getDateWithoutDay))
-                            .collect(Collectors.toList());
+                    if (period.equals(Period.MONTH)) {
+                        readings = readingsWithPossibleDuplicates
+                                .stream()
+                                .filter(distinctByKeys(EnvironmentReading::getValue, EnvironmentReading::getDateWithoutHour))
+                                .collect(Collectors.toList());
+                    } else {
+                        readings = readingsWithPossibleDuplicates
+                                .stream()
+                                .filter(distinctByKeys(EnvironmentReading::getValue, EnvironmentReading::getDateWithoutDay))
+                                .collect(Collectors.toList());
+
+                    }
                 } else {
                     readings = repository.findAllByLocationAndSensorAndDateAfterOrderByDateAsc(location, sensor, startDate);
                 }
