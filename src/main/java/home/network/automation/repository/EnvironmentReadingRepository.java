@@ -17,13 +17,13 @@ public interface EnvironmentReadingRepository extends JpaRepository<EnvironmentR
             value = "select E.* FROM environment_reading E\n" +
                     "join (\n" +
                     "\tselect DATE_FORMAT(date, :date_format) as day,\n" +
-                    "min(value) as value\n" +
+                    "min(value) as value, location\n" +
                     "    from environment_reading E\n" +
                     "    where E.location = :location and E.sensor = :sensor and E.date >=:date \n" +
                     "    group by DATE_FORMAT(date, :date_format)\n" +
                     "    ) X\n" +
                     "    ON DATE_FORMAT(E.date, :date_format) = X.day\n" +
-                    "    AND E.value = X.value order by E.date;",
+                    "    AND E.value = X.value AND E.location = X.location order by E.date;",
             nativeQuery = true
     )
     List<EnvironmentReading> findMinValueGroupByDate(@Param("location") String location, @Param("sensor") String sensor,@Param("date") Date date, @Param("date_format") String dateFormat);
@@ -32,13 +32,13 @@ public interface EnvironmentReadingRepository extends JpaRepository<EnvironmentR
             value = "select E.* FROM environment_reading E\n" +
                     "join (\n" +
                     "\tselect DATE_FORMAT(date, :date_format) as day,\n" +
-                    "max(value) as value\n" +
+                    "max(value) as value, location\n" +
                     "    from environment_reading E\n" +
                     "    where E.location = :location and E.sensor = :sensor and E.date >=:date \n" +
                     "    group by DATE_FORMAT(date, :date_format)\n" +
                     "    ) X\n" +
                     "    ON DATE_FORMAT(E.date, :date_format) = X.day\n" +
-                    "    AND E.value = X.value order by E.date;",
+                    "    AND E.value = X.value AND E.location = X.location order by E.date;",
             nativeQuery = true
     )
     List<EnvironmentReading> findMaxValueGroupByDate(@Param("location") String location, @Param("sensor") String sensor,@Param("date") Date date, @Param("date_format") String dateFormat);

@@ -5,6 +5,7 @@ import home.network.automation.model.Sensor;
 import lombok.*;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -41,6 +42,13 @@ public class EnvironmentReading {
        return date.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
+    }
+
+    public String getDateWithoutDay() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM");
+        String sDate = simpleDateFormat.format(date);
+
+        return sDate;
     }
 
 }
