@@ -82,38 +82,38 @@
         datasets: [{
                 label: "Balcony temperature min",
                 data: aDatasetTempMin,
-                backgroundColor: "rgba(54, 162, 235, 0.2)",
-                borderColor: "rgb(54, 162, 235)",
-                borderWidth: 1
+                backgroundColor: "rgba(0, 0, 179,0.1)",
+                borderColor: "rgb(0, 0, 179)",
+                borderWidth: 1,
             },
             {
                 label: "Balcony temperature max",
                 data: aDatasetTempMax,
-                backgroundColor: "rgba(54, 162, 235, 0.2)",
-                borderColor: "rgb(54, 162, 235)",
-                borderWidth: 1
+                backgroundColor: "rgb(230, 168, 0, 0.1)",
+                borderColor: "rgb(230, 168, 0)",
+                borderWidth: 1,
             },
             {
-                label: "Humidity",
+                label: "Humidity max",
                 data: aDatasetHumidity,
-                //backgroundColor: "rgba(54, 62, 235, 0.2)",
+                backgroundColor: "#d1fdff",
                 fill: false,
-                borderColor: "rgb(54, 62, 235)",
+                borderColor: "#09fff8",
                 borderWidth: 1
             },
             {
                 label: "Outside temperature min",
                 data: aDatasetTempMinOutside,
-                backgroundColor: "rgba(255, 0, 0, 0.2)",
-                borderColor: "rgb(255, 0, 0)",
-                borderWidth: 1
+                backgroundColor: "rgba(92, 0, 153, 0.1)",
+                borderColor: "rgb(92, 0, 153)",
+                borderWidth: 1,
             },
             {
                 label: "Outside temperature max",
                 data: aDatasetTempMaxOutside,
-                backgroundColor: "rgba(255, 0, 0, 0.2)",
-                borderColor: "rgb(255, 0, 0)",
-                borderWidth: 1
+                backgroundColor: "rgb(255, 17, 5, 0.1)",
+                borderColor: "rgb(255, 17, 5)",
+                borderWidth: 1,
             }]
     };
 
@@ -126,27 +126,7 @@
                 title: function(tooltipItems, data) {
                     return aDatasetDates[tooltipItems[0]['datasetIndex']][tooltipItems[0]['index']];
                 },
-                /*label: function(tooltipItem, data) {
-                    console.log(tooltipItem);
-                    console.log(tooltipItem['datasetIndex']);
-                    console.log(tooltipItem['index']);
-                    //return data['datasets'][0]['data'][tooltipItem['index']];
-                    return aDatasetDates[tooltipItem['datasetIndex']][tooltipItem['index']];
-                }*/
-                /*,
-                afterLabel: function(tooltipItem, data) {
-                    console.log(data);
-                    var dataset = data['datasets'][0];
-                    var percent = Math.round((dataset['data'][tooltipItem['index']] / dataset["_meta"][0]['total']) * 100)
-                    return '(' + percent + '%)';
-                }*/
-            },
-            /*backgroundColor: '#FFF',
-            titleFontSize: 16,
-            titleFontColor: '#0066ff',
-            bodyFontColor: '#000',
-            bodyFontSize: 14,
-            displayColors: false*/
+            }
         }
     };
 
