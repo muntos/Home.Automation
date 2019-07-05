@@ -14,8 +14,10 @@ import javax.annotation.PostConstruct;
 @Slf4j
 @Component
 public class HueLightsControl implements KodiListener {
+
     @Autowired
     private Kodi kodi;
+
     @Autowired
     private House house;
 

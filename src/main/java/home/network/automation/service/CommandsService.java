@@ -1,5 +1,6 @@
 package home.network.automation.service;
 
+import home.network.automation.devices.NetworkAudioDevice;
 import home.network.automation.model.CommandResult;
 
 public interface CommandsService {
@@ -7,4 +8,5 @@ public interface CommandsService {
     CommandResult changedLogitechMediaServerVolume(String volumeValue);
     void turnOnLogitechMediaServer();
     void turnOffLogitechMediaServer();
+    void telnetConnect(NetworkAudioDevice networkAudioDevice);
 }

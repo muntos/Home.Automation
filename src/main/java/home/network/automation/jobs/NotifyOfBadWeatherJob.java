@@ -1,5 +1,6 @@
 package home.network.automation.jobs;
 
+import home.network.automation.devices.NetworkAudioDevice;
 import home.network.automation.devices.PhilipsHueBridge;
 import home.network.automation.devices.api.OpenWeatherMap;
 import home.network.automation.model.ForecastWeather;
@@ -7,6 +8,7 @@ import home.network.automation.model.PhilipsHue.HueLightState;
 import home.network.automation.model.PhilipsHue.HueMotionSensor;
 import home.network.automation.model.PhilipsHue.HueSensor;
 import home.network.automation.observer.House;
+import home.network.automation.service.CommandsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Profile({"prod"})
+@Profile({"prod", "dev"})
 @Slf4j
 @Component
 public class NotifyOfBadWeatherJob {
@@ -29,6 +31,9 @@ public class NotifyOfBadWeatherJob {
     @Autowired
     private House house;
 
+    @Autowired
+    private CommandsService commandsService;
+
     private PhilipsHueBridge bridge;
 
     @Autowired
@@ -37,7 +42,7 @@ public class NotifyOfBadWeatherJob {
         bridge = house.getDevice("hue");
     }
 
-    @Scheduled(fixedDelay = 5000)
+    //@Scheduled(fixedDelay = 5000)
     private void checkHallwaySensor() {
         HueSensor sensor = bridge.getSensor("Hallway sensor", HueMotionSensor.class);
 
@@ -50,6 +55,14 @@ public class NotifyOfBadWeatherJob {
                 flashHallwayStrip();
             }
         }
+    }
+
+    @Scheduled(fixedDelay = 5000)
+    private void test() {
+        NetworkAudioDevice networkAudioDevice = house.getDevice("X4500H");
+        commandsService.telnetConnect(networkAudioDevice);
+        int x = 1;
+
     }
 
     private void flashHallwayStrip() {

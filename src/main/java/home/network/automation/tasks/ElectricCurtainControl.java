@@ -20,10 +20,13 @@ import java.util.concurrent.*;
 @Slf4j
 @Component
 public class ElectricCurtainControl implements KodiListener {
+
     @Autowired
     private Kodi kodi;
+
     @Autowired
     private House house;
+
     @Autowired
     private CommandsService commandsService;
 

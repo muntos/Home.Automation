@@ -13,13 +13,20 @@ a1:
     balcony:
         living:
             mac: 34:ea:34:c7:61:f8
+
 hegel:
     h80:
         initialVolume: 30
+
+denon:
+    X4500H:
+        server: 192.168.1.31
+
 logitech:
     harmony:
         address: 192.168.1.170
         connect: false
+
 open:
     weather:
         map:
@@ -29,19 +36,20 @@ open:
                 key: d233224e28cc867dd88f274bccbc96c0
                 port: 80
                 protocol: http
+
 philips:
     bridge:
         address: 192.168.1.169
         username: nJCp1QzRfxjkJ2GKVJYbBo0PRyQVZ5S5rTCq23Ot
+
 rm:
     bridge:
         address: 192.168.1.98
         port: 9876
         protocol: http
+
 rmpro:
     mac: 34:ea:34:bb:1b:9c
-
-
 
 sp3:
     h80:

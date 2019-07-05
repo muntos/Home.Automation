@@ -46,6 +46,9 @@ public class Config {
     @Value("${a1.balcony.living.mac}")
     private String a1forLivingBalcony;
 
+    @Value("${denon.X4500H.server}")
+    private String denonTelnetPort;
+
     @Bean
     House house(){
         BroadlinkBridge broadlinkBridge = new BroadlinkBridge(rmBridgeProtocol, rmBridgeAddress, rmBridgePort);
@@ -60,6 +63,7 @@ public class Config {
                                 .setPrefferredRemote(house.getDevice("RMPRO"))
                                 .addButton(new Button(4, "VolumeUp", "Volume Up").mapsTo(Button.Mapping.VOLUME_UP))
                                 .addButton(new Button(3, "VolumeDown", "Volume Down").mapsTo(Button.Mapping.VOLUME_DOWN)))
+            .addDevice(new NetworkAudioDevice("Denon X4500H AVR", "X4500H", 35, false, denonTelnetPort))
             .addDevice(new ElectricCurtain("Electric curtain for Living room", "curtainLivingRoom", 30, 20)
                                 .addButton(new Button(8, "close", "Curtain close").mapsTo(Button.Mapping.CURTAIN_LIVINGROOM_CLOSE))
                                 .addButton(new Button(11, "open", "Curtain open").mapsTo(Button.Mapping.CURTAIN_LIVINGROOM_OPEN))

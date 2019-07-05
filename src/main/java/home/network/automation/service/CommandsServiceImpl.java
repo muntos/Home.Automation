@@ -1,6 +1,7 @@
 package home.network.automation.service;
 
 import home.network.automation.devices.AudioDevice;
+import home.network.automation.devices.NetworkAudioDevice;
 import home.network.automation.devices.RemoteControlDevice;
 import home.network.automation.devices.RemoteControlledDevice;
 import home.network.automation.model.Button;
@@ -92,5 +93,10 @@ public class CommandsServiceImpl implements CommandsService {
     public void turnOffLogitechMediaServer() {
         log.info("Received Turn off command from LMS");
         smartPlugControl.controlH80Plug(Activity.Status.HUB_IS_TURNING_OFF);
+    }
+
+    @Override
+    public void telnetConnect(NetworkAudioDevice networkAudioDevice) {
+
     }
 }

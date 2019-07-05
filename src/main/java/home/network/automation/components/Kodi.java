@@ -3,6 +3,7 @@ package home.network.automation.components;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -26,6 +27,10 @@ public class Kodi {
                 default:
                     return null;
             }
+        }
+
+        public static Boolean isPlaybackEvent(Event event) {
+            return Arrays.asList(PLAY_STARTED, PLAY_PAUSED, PLAY_RESUMED, PLAY_ENDED).contains(event);
         }
     }
 
