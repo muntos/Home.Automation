@@ -5,11 +5,11 @@
 
 	<groupId>home.network</groupId>
 	<artifactId>house.automation</artifactId>
-	<version>0.4.6</version>
+	<version>0.4.7</version>
 	<packaging>jar</packaging>
 
 	<name>Home Automation</name>
-	<description>Demo project for Spring Boot</description>
+	<description>My Home Automation POC</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
