@@ -9,7 +9,7 @@ import home.network.automation.model.CommandResult;
 import home.network.automation.observer.House;
 import home.network.automation.tasks.SmartPlugControl;
 import lombok.extern.slf4j.Slf4j;
-import net.whistlingfish.harmony.config.Activity;
+import external.logitech.harmony.config.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

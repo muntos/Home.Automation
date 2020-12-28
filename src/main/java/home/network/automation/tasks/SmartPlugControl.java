@@ -1,20 +1,21 @@
 package home.network.automation.tasks;
 
+import external.logitech.harmony.ActivityChangeListener;
+import external.logitech.harmony.ActivityStatusListener;
+import external.logitech.harmony.HarmonyClient;
+import external.logitech.harmony.config.Activity;
 import home.network.automation.devices.HarmonyHub;
-import home.network.automation.devices.broadlink.SmartPlug;
+import home.network.automation.devices.generic.SmartPlug;
 import home.network.automation.observer.House;
 import lombok.extern.slf4j.Slf4j;
-import net.whistlingfish.harmony.ActivityChangeListener;
-import net.whistlingfish.harmony.ActivityStatusListener;
-import net.whistlingfish.harmony.HarmonyClient;
-import net.whistlingfish.harmony.config.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
-import static home.network.automation.devices.broadlink.SmartPlug.Status.OFF;
-import static home.network.automation.devices.broadlink.SmartPlug.Status.ON;
+import static home.network.automation.devices.generic.SmartPlug.Status.OFF;
+import static home.network.automation.devices.generic.SmartPlug.Status.ON;
+
 
 @Slf4j
 @Component
@@ -52,19 +53,19 @@ public class SmartPlugControl {
     }
 
     public void controlH80Plug(Activity.Status status){
-        String plugName = "SP3_H80";
-        SmartPlug smartPlug = house.getDevice(plugName);
-        if (smartPlug == null){
-            log.error("Could not find any smart plug named '{}', check your configuration!", plugName);
+        SmartPlug tapoP100Plug = house.getDevice("P100_H80");
+
+        if (tapoP100Plug == null){
+            log.error("Could not find any smart plug named '{}', check your configuration!", "P100_H80");
             return;
         }
 
         switch (status){
             case ACTIVITY_IS_STARTING:
-                smartPlug.setStatusWithScheduler(ON);
+                tapoP100Plug.setStatusWithScheduler(ON);
                 break;
             case HUB_IS_TURNING_OFF:
-                smartPlug.setStatusWithScheduler(OFF);
+                tapoP100Plug.setStatusWithScheduler(OFF);
                 break;
         }
     }

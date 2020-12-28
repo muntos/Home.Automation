@@ -9,7 +9,7 @@ public class AutomatedTelnetClient {
     private TelnetClient telnet = new TelnetClient();
     private InputStream in;
     private PrintStream out;
-    private String prompt = "%";
+    private String prompt = "\r";
 
     public AutomatedTelnetClient(String server) {
         try {
@@ -80,7 +80,7 @@ public class AutomatedTelnetClient {
     public static void main(String[] args) {
         try {
             AutomatedTelnetClient telnet = new AutomatedTelnetClient(
-                    "192.168.1.31");
+                    "192.168.1.146");
             System.out.println("Got Connection...");
             telnet.sendCommand("ps -ef ");
             System.out.println("run command");

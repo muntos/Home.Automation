@@ -5,11 +5,21 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import home.network.automation.model.PhilipsHue.*;
+import home.network.automation.devices.generic.Device;
+import home.network.automation.model.PhilipsHue.HueAmbientLightSensor;
+import home.network.automation.model.PhilipsHue.HueBridgeErrorResponse;
+import home.network.automation.model.PhilipsHue.HueLight;
+import home.network.automation.model.PhilipsHue.HueLightState;
+import home.network.automation.model.PhilipsHue.HueMotionSensor;
+import home.network.automation.model.PhilipsHue.HueSensor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.util.LinkedMultiValueMap;
@@ -92,7 +102,7 @@ public class PhilipsHueBridge extends Device {
                     .getForEntity(url, type);
             obj = response.getBody();
         } catch (HttpMessageNotReadableException ex)   {
-            ParameterizedTypeReference<List<HueBridgeErrorResponse>> list = new ParameterizedTypeReference<List<HueBridgeErrorResponse>>() {};
+            ParameterizedTypeReference<List<HueBridgeErrorResponse>> list = new ParameterizedTypeReference<>() {};
             ResponseEntity<List<HueBridgeErrorResponse>> response = restTemplate.exchange(url, HttpMethod.GET,null, list);
             List<HueBridgeErrorResponse> errors = response.getBody();
             log.error("Get for {} returned error: {}", type, errors.get(0).getError().getDescription());
@@ -129,13 +139,13 @@ public class PhilipsHueBridge extends Device {
 
     public HueLight getLight(int id) {
         log.debug("Get light status for id={}", id);
-        String path = LIGHTS_PATH + "/" + String.valueOf(id);
+        String path = LIGHTS_PATH + "/" + id;
         return get(path, HueLight.class);
     }
 
     public String setLight(int id, HueLightState state) {
         log.debug("Set light id={} state {}", id, state);
-        String path = LIGHTS_PATH + "/" + String.valueOf(id) + "/" + STATE_PATH;
+        String path = LIGHTS_PATH + "/" + id + "/" + STATE_PATH;
         return put(path, state);
     }
 

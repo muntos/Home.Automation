@@ -7,8 +7,8 @@ import home.network.automation.model.Button;
 import home.network.automation.model.CommandResult;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.whistlingfish.harmony.HarmonyClient;
-import net.whistlingfish.harmony.HarmonyClientModule;
+import external.logitech.harmony.HarmonyClient;
+import external.logitech.harmony.HarmonyClientModule;
 
 @Slf4j
 public class HarmonyHub extends RemoteControlDevice{

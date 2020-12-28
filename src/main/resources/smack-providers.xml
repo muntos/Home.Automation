@@ -3,6 +3,6 @@
   <iqProvider>
     <elementName>oa</elementName>
     <namespace>connect.logitech.com</namespace>
-    <className>net.whistlingfish.harmony.protocol.OAReplyProvider</className>
+    <className>external.logitech.harmony.protocol.OAReplyProvider</className>
   </iqProvider>
 </smackProviders>

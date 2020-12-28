@@ -57,7 +57,7 @@ public class NotifyOfBadWeatherJob {
         }
     }
 
-    @Scheduled(fixedDelay = 5000)
+    //@Scheduled(fixedDelay = 5000)
     private void test() {
         NetworkAudioDevice networkAudioDevice = house.getDevice("X4500H");
         commandsService.telnetConnect(networkAudioDevice);

@@ -2,9 +2,12 @@ package home.network.automation;
 
 import home.network.automation.devices.*;
 import home.network.automation.devices.api.BroadlinkBridge;
-import home.network.automation.devices.broadlink.A1Sensor;
+import home.network.automation.devices.broadlink.A1Sensor.A1Sensor;
+import home.network.automation.devices.broadlink.A1Sensor.A1SensorLegacy;
 import home.network.automation.devices.broadlink.BroadlinkHub;
-import home.network.automation.devices.broadlink.SmartPlug;
+import home.network.automation.devices.broadlink.Sp3Plug.SP3Plug;
+import home.network.automation.devices.tplink.TapoLogin;
+import home.network.automation.devices.tplink.TapoP100Plug;
 import home.network.automation.model.Button;
 import home.network.automation.observer.House;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,22 +16,22 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class Config {
-    @Value("${rmpro.mac}")
+    @Value("${broadlink.rmpro.module1.mac}")
     private String rmProMac;
 
-    @Value("${sp3.h80.mac}")
+    @Value("${broadlink.sp3.module1.mac}")
     private String sp3forH80Mac;
 
-    @Value("${sp3.window.mac}")
+    @Value("${broadlink.sp3.module2.mac}")
     private String sp3forWindow;
 
-    @Value("${rm.bridge.protocol}")
+    @Value("${broadlink.bridge.protocol}")
     private String rmBridgeProtocol;
 
-    @Value("${rm.bridge.address}")
+    @Value("${broadlink.bridge.address}")
     private String rmBridgeAddress;
 
-    @Value("${rm.bridge.port}")
+    @Value("${broadlink.bridge.port}")
     private Integer rmBridgePort;
 
     @Value("${logitech.harmony.address}")
@@ -43,19 +46,28 @@ public class Config {
     @Value("${philips.bridge.username}")
     private String hueBridgeUserName;
 
-    @Value("${a1.balcony.living.mac}")
-    private String a1forLivingBalcony;
+    @Value("${broadlink.a1.module1.mac}")
+    private String a1Module1MacAddress;
+
+    @Value("${broadlink.a1.module1.address}")
+    private String a1Module1IpAddress;
 
     @Value("${denon.X4500H.server}")
     private String denonTelnetPort;
+
+    @Value("${tplink.tapo.login.username}")
+    private String tapoLoginUsername;
+
+    @Value("${tplink.tapo.login.password}")
+    private String tapoLoginPassword;
 
     @Bean
     House house(){
         BroadlinkBridge broadlinkBridge = new BroadlinkBridge(rmBridgeProtocol, rmBridgeAddress, rmBridgePort);
         House house = new House();
         house
-            .addDevice(new SmartPlug("Broadlink SP3 connected to Hegel H80 amplifier","SP3_H80", sp3forH80Mac, broadlinkBridge, 60, 60))
-            .addDevice(new SmartPlug("Broadlink SP3 mini martor for window sensor", "SP3_Window", sp3forWindow, broadlinkBridge, 0, 0))
+            .addDevice(new SP3Plug("Broadlink SP3 connected to Hegel H80 amplifier","SP3_H80", sp3forH80Mac, broadlinkBridge, 60, 60))
+            .addDevice(new SP3Plug("Broadlink SP3 mini martor for window sensor", "SP3_Window", sp3forWindow, broadlinkBridge, 0, 0))
             .addDevice(new BroadlinkHub("Broadlink RM-PRO", "RMPRO", rmProMac, broadlinkBridge))
             .addDevice(new HarmonyHub("Logitech Harmony Elite", "Harmony", harmonyAddress, 100, connectToHub))
             .addDevice(new PhilipsHueBridge("Philips Hue Bridge", "Hue", hueBridgeAddress, hueBridgeUserName))
@@ -71,7 +83,10 @@ public class Config {
             .addDevice(new RemoteControlledDevice("LG OLED TV", "TV")
                                 .addButton(new Button(0, "chUp", "Channel Up"))
                                 .addButton(new Button(0, "chDown", "Channel Down")))
-            .addDevice(new A1Sensor("Broadlink A1 Sensor in Livingroom Balcony", "A1_Balcony_Living", a1forLivingBalcony, broadlinkBridge));
+            .addDevice(new A1SensorLegacy("Broadlink A1 Sensor in Livingroom Balcony", "A1_Balcony_Living", a1Module1MacAddress, broadlinkBridge))
+            .addDevice(new A1Sensor("Broadlink A1 Sensor for kitchen rack", "A1Kitchen", a1Module1MacAddress, a1Module1IpAddress))
+            .addDevice(new TapoP100Plug("Tapo P100 connected to Hegel H80", "P100_H80", "192.168.1.110", new TapoLogin(tapoLoginUsername, tapoLoginPassword), 60, 60));
+
 
         return house;
     }

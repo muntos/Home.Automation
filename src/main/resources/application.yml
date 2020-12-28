@@ -1,5 +1,6 @@
 server:
-    contextPath: /home
+    servlet:
+        context-path: /home
     port: 8888
 
 spring:
@@ -9,10 +10,34 @@ spring:
 house:
     location: Bucharest
 
-a1:
-    balcony:
-        living:
+philips:
+    bridge:
+        address: 192.168.1.169
+        username: nJCp1QzRfxjkJ2GKVJYbBo0PRyQVZ5S5rTCq23Ot
+
+tp-link:
+    tapo:
+        login:
+            username: alex.munteanu@gmail.com
+            password: v8aD364VM6XWY_W
+
+broadlink:
+    a1:
+        module1:
             mac: 34:ea:34:c7:61:f8
+            address: 192.168.1.80
+    rmpro:
+        module1:
+            mac: 34:ea:34:bb:1b:9c
+    sp3:
+        module1:
+            mac: 34:ea:34:9d:2a:50
+        module2:
+            mac: 34:ea:34:59:6a:f7
+    bridge:
+        address: 192.168.1.98
+        port: 9876
+        protocol: http
 
 hegel:
     h80:
@@ -20,7 +45,7 @@ hegel:
 
 denon:
     X4500H:
-        server: 192.168.1.31
+        server: 192.168.1.146
 
 logitech:
     harmony:
@@ -36,28 +61,6 @@ open:
                 key: d233224e28cc867dd88f274bccbc96c0
                 port: 80
                 protocol: http
-
-philips:
-    bridge:
-        address: 192.168.1.169
-        username: nJCp1QzRfxjkJ2GKVJYbBo0PRyQVZ5S5rTCq23Ot
-
-rm:
-    bridge:
-        address: 192.168.1.98
-        port: 9876
-        protocol: http
-
-rmpro:
-    mac: 34:ea:34:bb:1b:9c
-
-sp3:
-    h80:
-        mac: 34:ea:34:9d:2a:50
-    window:
-        mac: 34:ea:34:59:6a:f7
-
-
 
 ---
 

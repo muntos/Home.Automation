@@ -1,17 +1,13 @@
 package home.network.automation;
 
-import java.util.Arrays;
-import java.util.stream.StreamSupport;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.env.AbstractEnvironment;
-import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.core.env.MutablePropertySources;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 @Component
 public class PropertyLogger  {

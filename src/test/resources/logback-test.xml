@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="home.network.automation.LogbackFilter"/>
+        <encoder>
+            <pattern>
+                %d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36}.%M - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <logger name="home.network.automation" level="info"/>
+
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+
+
+</configuration>

@@ -1,6 +1,7 @@
 package home.network.automation.observer;
 
 import home.network.automation.devices.*;
+import home.network.automation.devices.generic.Device;
 
 import java.util.ArrayList;
 import java.util.Comparator;

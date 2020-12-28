@@ -1,9 +1,9 @@
 package home.network.automation.jobs;
 
 import home.network.automation.devices.api.OpenWeatherMap;
-import home.network.automation.devices.broadlink.A1Sensor;
+import home.network.automation.devices.broadlink.A1Sensor.A1Response;
+import home.network.automation.devices.broadlink.A1Sensor.A1Sensor;
 import home.network.automation.entity.EnvironmentReading;
-import home.network.automation.model.PhilipsHue.A1SensorResponse;
 import home.network.automation.model.Location;
 import home.network.automation.model.OpenWeatherMap.OpenWeatherMapNowResponse;
 import home.network.automation.model.Sensor;
@@ -33,10 +33,10 @@ public class SaveEnvironmentReadingsJob {
 
     @Scheduled(fixedDelay = 3600000)
     public void doJob(){
-        A1Sensor a1Sensor = house.getDevice("A1_Balcony_Living");
+        A1Sensor a1Sensor = house.getDevice("A1Kitchen");
         Date now = new Date();
 
-        Optional<A1SensorResponse> a1SensorResponse = a1Sensor.getReadings();
+        Optional<A1Response> a1SensorResponse = a1Sensor.getReadings();
 
         if (a1SensorResponse.isPresent()) {
             Optional<OpenWeatherMapNowResponse> currentWeather = openWeatherMap.getCurrentWeather("Bucharest");
