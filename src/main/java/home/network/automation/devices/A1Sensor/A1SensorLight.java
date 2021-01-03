@@ -1,4 +1,4 @@
-package home.network.automation.devices.broadlink.A1Sensor;
+package home.network.automation.devices.A1Sensor;
 
 public enum A1SensorLight {
     LIGHT_DARK ((byte)0x00),

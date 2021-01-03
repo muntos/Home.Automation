@@ -2,10 +2,10 @@ package home.network.automation;
 
 import home.network.automation.devices.*;
 import home.network.automation.devices.api.BroadlinkBridge;
-import home.network.automation.devices.broadlink.A1Sensor.A1Sensor;
-import home.network.automation.devices.broadlink.A1Sensor.A1SensorLegacy;
-import home.network.automation.devices.broadlink.BroadlinkHub;
-import home.network.automation.devices.broadlink.Sp3Plug.SP3Plug;
+import home.network.automation.devices.A1Sensor.A1Sensor;
+import home.network.automation.devices.A1Sensor.A1SensorLegacy;
+import home.network.automation.devices.BroadlinkHub;
+import home.network.automation.devices.Sp3Plug.SP3Plug;
 import home.network.automation.devices.tplink.TapoLogin;
 import home.network.automation.devices.tplink.TapoP100Plug;
 import home.network.automation.model.Button;

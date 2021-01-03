@@ -1,4 +1,4 @@
-package home.network.automation.devices.broadlink.Sp3Plug;
+package home.network.automation.devices.Sp3Plug;
 
 import home.network.automation.devices.api.BroadlinkBridge;
 import home.network.automation.devices.generic.SmartPlug;

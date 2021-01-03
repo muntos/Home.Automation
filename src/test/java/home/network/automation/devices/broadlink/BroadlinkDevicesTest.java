@@ -2,8 +2,9 @@ package home.network.automation.devices.broadlink;
 
 import com.github.mob41.blapi.A1Device;
 import com.github.mob41.blapi.RM2Device;
+import com.github.mob41.blapi.SP2Device;
 import com.github.mob41.blapi.mac.Mac;
-import home.network.automation.devices.broadlink.A1Sensor.A1Sensor;
+import home.network.automation.devices.A1Sensor.A1Sensor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -26,13 +27,26 @@ public class BroadlinkDevicesTest {
     }
 
     @Test
-    public void testRMPro() throws Exception{
-        RM2Device rm2Device = new RM2Device("192.168.1.152", new Mac("34:ea:34:bb:1b:9c"));
+    public void testRMPro() throws Exception {
+        RM2Device rm2Device = new RM2Device("192.168.1.30", new Mac("34:ea:34:bb:1b:9c"));
 
         boolean success = rm2Device.auth();
         log.info("Auth status: " + (success ? "Success!" : "Failed!"));
 
         log.info("RM2+ temp: {}", rm2Device.getTemp());
+    }
+
+    @Test
+    public void testSP2Device() throws Exception {
+        SP2Device sp2Device = new SP2Device("192.168.1.50", new Mac("34:ea:34:59:6a:f7"));
+
+        boolean success = sp2Device.auth();
+        log.info("Auth status: " + (success ? "Success!" : "Failed!"));
+
+        Boolean state = sp2Device.getState();
+        log.info("Plug state: {}", state);
+        sp2Device.setState(!state);
+
     }
 
 }
