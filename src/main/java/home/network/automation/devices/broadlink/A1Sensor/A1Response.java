@@ -1,4 +1,4 @@
-package home.network.automation.devices.A1Sensor;
+package home.network.automation.devices.broadlink.A1Sensor;
 
 import com.github.mob41.blapi.EnvData;
 import lombok.AllArgsConstructor;

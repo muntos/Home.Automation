@@ -1,8 +1,8 @@
 package home.network.automation.jobs;
 
 import home.network.automation.devices.api.OpenWeatherMap;
-import home.network.automation.devices.A1Sensor.A1Response;
-import home.network.automation.devices.A1Sensor.A1Sensor;
+import home.network.automation.devices.broadlink.A1Sensor.A1Response;
+import home.network.automation.devices.broadlink.A1Sensor.A1Sensor;
 import home.network.automation.entity.EnvironmentReading;
 import home.network.automation.model.Location;
 import home.network.automation.model.OpenWeatherMap.OpenWeatherMapNowResponse;

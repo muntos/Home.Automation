@@ -1,4 +1,4 @@
-package home.network.automation.devices.Sp3Plug;
+package home.network.automation.devices.broadlink.Sp3Plug;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import home.network.automation.model.PhilipsHue.BroadlinkBridgeResponse;

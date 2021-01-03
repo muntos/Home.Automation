@@ -1,4 +1,4 @@
-package home.network.automation.devices.A1Sensor;
+package home.network.automation.devices.broadlink.A1Sensor;
 
 public enum A1SensorNoise {
     NOISE_QUIET ((byte)0x00),

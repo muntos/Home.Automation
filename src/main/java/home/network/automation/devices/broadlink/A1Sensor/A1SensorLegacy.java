@@ -1,4 +1,4 @@
-package home.network.automation.devices.A1Sensor;
+package home.network.automation.devices.broadlink.A1Sensor;
 
 import home.network.automation.devices.generic.Device;
 import home.network.automation.devices.api.BroadlinkBridge;

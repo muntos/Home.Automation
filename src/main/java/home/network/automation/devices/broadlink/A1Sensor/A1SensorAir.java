@@ -1,4 +1,4 @@
-package home.network.automation.devices.A1Sensor;
+package home.network.automation.devices.broadlink.A1Sensor;
 
 public enum A1SensorAir {
     AIR_QUALITY_EXCELLENT ((byte)0x00),

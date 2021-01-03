@@ -4,7 +4,7 @@ import com.github.mob41.blapi.A1Device;
 import com.github.mob41.blapi.RM2Device;
 import com.github.mob41.blapi.SP2Device;
 import com.github.mob41.blapi.mac.Mac;
-import home.network.automation.devices.A1Sensor.A1Sensor;
+import home.network.automation.devices.broadlink.A1Sensor.A1Sensor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
