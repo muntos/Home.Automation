@@ -5,7 +5,7 @@ import home.network.automation.model.PhilipsHue.BroadlinkBridgeResponse;
 import lombok.Getter;
 
 @Getter
-public class SP3PlugResponse extends BroadlinkBridgeResponse {
+public class SP3PlugResponseLegacy extends BroadlinkBridgeResponse {
     @JsonProperty("on_off_status")
     private String onOffStatus;
 }

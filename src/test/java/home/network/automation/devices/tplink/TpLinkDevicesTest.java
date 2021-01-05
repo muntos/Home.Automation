@@ -2,12 +2,14 @@ package home.network.automation.devices.tplink;
 
 import home.network.automation.devices.generic.SmartPlug;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static home.network.automation.devices.generic.SmartPlug.Status.OFF;
 import static home.network.automation.devices.generic.SmartPlug.Status.ON;
 
 @Slf4j
+@Ignore
 public class TpLinkDevicesTest {
 
     @Test

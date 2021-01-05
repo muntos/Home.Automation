@@ -43,7 +43,7 @@ public abstract class SmartPlug extends Device {
         }
     }
 
-    public Boolean value(Status status){
+    public static Boolean value(Status status){
         switch (status){
             case ON:
                 return true;

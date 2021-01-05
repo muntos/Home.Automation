@@ -23,8 +23,7 @@ public class A1Sensor extends Device {
         try {
             A1Device dev = new A1Device(ipAddress, new Mac(macAddress));
 
-            boolean success = dev.auth();
-            if (!success) {
+            if (!dev.auth()) {
                 log.error("Failed to authorize '{}' using MAC:{} and IP:{}", shortName, macAddress, ipAddress);
                 return Optional.empty();
             }

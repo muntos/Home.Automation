@@ -6,9 +6,11 @@ import com.github.mob41.blapi.SP2Device;
 import com.github.mob41.blapi.mac.Mac;
 import home.network.automation.devices.broadlink.A1Sensor.A1Sensor;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Ignore;
 import org.junit.Test;
 
 @Slf4j
+@Ignore
 public class BroadlinkDevicesTest {
 
     @Test

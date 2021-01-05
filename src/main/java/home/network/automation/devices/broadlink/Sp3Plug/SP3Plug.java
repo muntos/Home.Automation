@@ -1,51 +1,58 @@
 package home.network.automation.devices.broadlink.Sp3Plug;
 
-import home.network.automation.devices.api.BroadlinkBridge;
+import com.github.mob41.blapi.SP2Device;
+import com.github.mob41.blapi.mac.Mac;
 import home.network.automation.devices.generic.SmartPlug;
 import home.network.automation.model.CommandResult;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 
-import java.util.HashMap;
-
 @Slf4j
 public class SP3Plug extends SmartPlug {
 
     private String macAddress;
-    private BroadlinkBridge broadlinkBridge;
+    private String ipAddress;
 
-    public SP3Plug(String name, String shortName, String macAddress, BroadlinkBridge broadlinkBridge, int waitBeforeTurnOff, int minWaitBeforeStatesChange) {
+    public SP3Plug(String name, String shortName, String macAddress, String ipAddress, int waitBeforeTurnOff, int minWaitBeforeStatesChange) {
         super(name, shortName, waitBeforeTurnOff, minWaitBeforeStatesChange);
         this.macAddress = macAddress;
-        this.broadlinkBridge = broadlinkBridge;
+        this.ipAddress = ipAddress;
     }
 
-    public Status getStatus(){
+    public Status getStatus() {
         Status status = Status.UNKNOWN;
-        SP3PlugResponse response = broadlinkBridge.getStatus(name, macAddress, "status", SP3PlugResponse.class);
-        if (response != null){
-            if (response.getStatus().equals(SP3PlugResponse.status.ok)){
-                status = value(response.getOnOffStatus());
+        try {
+            SP2Device sp2Device = new SP2Device(ipAddress, new Mac(macAddress));
+            if (!sp2Device.auth()) {
+                log.error("Failed to authorize plug '{}' using MAC:{} and IP:{}", shortName, macAddress, ipAddress);
+                return status;
             }
+
+            status = SmartPlug.value(sp2Device.getState());
+            log.info("'{}' (MAC = {}) status: {}", name, macAddress, status);
+            return status;
+        } catch (Exception ex) {
+            log.error("Exception trying to get plug '{}' state using MAC:{} and IP:{}!", shortName, macAddress, ipAddress);
+            return status;
         }
-        log.info("'{}' (MAC = {}) status: {}", name, macAddress, status);
-        return status;
     }
 
     public CommandResult setStatusNow(Status status){
-        HashMap<String, String> values = new HashMap<>();
-        values.put("on", value(status).toString());
-        SP3PlugResponse response = broadlinkBridge.sendCommand(values, name, macAddress, SP3PlugResponse.class);
-        if (response != null){
-            Boolean success = response.getStatus().equals(SP3PlugResponse.status.ok);
-            log.info("'{}' (MAC = {}) set status to '{}' returned {}", name, macAddress, status, success);
-            if (success){
-                lastStatusChange = new DateTime();
+        try {
+            SP2Device sp2Device = new SP2Device(ipAddress, new Mac(macAddress));
+            if (!sp2Device.auth()) {
+                String errorMsg = String.format("Failed to authorize plug '%s' using MAC:%s and IP:%s", shortName, macAddress, ipAddress);
+                log.error(errorMsg);
+                return new CommandResult(false, errorMsg);
             }
-            return new CommandResult(success, response.getMsg());
-        }
 
-        return new CommandResult(false, String.format("Failed to set '%s' (MAC = %s) status to '%s'", name, macAddress, status));
+            sp2Device.setState(SmartPlug.value(status));
+            lastStatusChange = new DateTime();
+            return new CommandResult(true, String.format("Successfully set '%s' (MAC = %s) status to '%s'", name, macAddress, status));
+        } catch (Exception ex) {
+            log.error("Exception trying to set plug '{}' state using MAC:{} and IP:{}!", shortName, macAddress, ipAddress);
+            return new CommandResult(false, String.format("Failed to set '%s' (MAC = %s) status to '%s'", name, macAddress, status));
+        }
     }
 
 }

@@ -5,7 +5,7 @@ import home.network.automation.devices.api.BroadlinkBridge;
 import home.network.automation.devices.broadlink.A1Sensor.A1Sensor;
 import home.network.automation.devices.broadlink.A1Sensor.A1SensorLegacy;
 import home.network.automation.devices.BroadlinkHub;
-import home.network.automation.devices.broadlink.Sp3Plug.SP3Plug;
+import home.network.automation.devices.broadlink.Sp3Plug.SP3PlugLegacy;
 import home.network.automation.devices.tplink.TapoLogin;
 import home.network.automation.devices.tplink.TapoP100Plug;
 import home.network.automation.model.Button;
@@ -66,8 +66,8 @@ public class Config {
         BroadlinkBridge broadlinkBridge = new BroadlinkBridge(rmBridgeProtocol, rmBridgeAddress, rmBridgePort);
         House house = new House();
         house
-            .addDevice(new SP3Plug("Broadlink SP3 connected to Hegel H80 amplifier","SP3_H80", sp3forH80Mac, broadlinkBridge, 60, 60))
-            .addDevice(new SP3Plug("Broadlink SP3 mini martor for window sensor", "SP3_Window", sp3forWindow, broadlinkBridge, 0, 0))
+            .addDevice(new SP3PlugLegacy("Broadlink SP3 connected to Hegel H80 amplifier","SP3_H80", sp3forH80Mac, broadlinkBridge, 60, 60))
+            .addDevice(new SP3PlugLegacy("Broadlink SP3 mini martor for window sensor", "SP3_Window", sp3forWindow, broadlinkBridge, 0, 0))
             .addDevice(new BroadlinkHub("Broadlink RM-PRO", "RMPRO", rmProMac, broadlinkBridge))
             .addDevice(new HarmonyHub("Logitech Harmony Elite", "Harmony", harmonyAddress, 100, connectToHub))
             .addDevice(new PhilipsHueBridge("Philips Hue Bridge", "Hue", hueBridgeAddress, hueBridgeUserName))

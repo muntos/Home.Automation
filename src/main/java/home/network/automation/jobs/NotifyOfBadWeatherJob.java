@@ -42,7 +42,7 @@ public class NotifyOfBadWeatherJob {
         bridge = house.getDevice("hue");
     }
 
-    //@Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 5000)
     private void checkHallwaySensor() {
         HueSensor sensor = bridge.getSensor("Hallway sensor", HueMotionSensor.class);
 

@@ -100,7 +100,7 @@ public class TapoP100Plug extends SmartPlug {
             tapoFlow.setPlugState(c658a, token, handshakeResponse.getCookie(), deviceOn);
             log.info("Set plug '{}' state to {}", this, deviceOn);
         } catch (NoSuchAlgorithmException ex) {
-            log.error("Error trying to set plug {} state to {}", this, deviceOn);
+            log.error("Error trying to set plug '{}' state to {}", this, deviceOn);
             return false;
         }
 
