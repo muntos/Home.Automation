@@ -1,11 +1,16 @@
 package home.network.automation;
 
-import home.network.automation.devices.*;
 import home.network.automation.devices.api.BroadlinkBridge;
 import home.network.automation.devices.broadlink.A1Sensor.A1Sensor;
 import home.network.automation.devices.broadlink.A1Sensor.A1SensorLegacy;
-import home.network.automation.devices.BroadlinkHub;
+import home.network.automation.devices.broadlink.RmProHub.BroadlinkHub;
 import home.network.automation.devices.broadlink.Sp3Plug.SP3PlugLegacy;
+import home.network.automation.devices.generic.AudioDevice;
+import home.network.automation.devices.generic.ElectricCurtain;
+import home.network.automation.devices.generic.NetworkAudioDevice;
+import home.network.automation.devices.generic.RemoteControlledDevice;
+import home.network.automation.devices.logitech.HarmonyHub;
+import home.network.automation.devices.philips.HueBridge;
 import home.network.automation.devices.tplink.TapoLogin;
 import home.network.automation.devices.tplink.TapoP100Plug;
 import home.network.automation.model.Button;
@@ -70,7 +75,7 @@ public class Config {
             .addDevice(new SP3PlugLegacy("Broadlink SP3 mini martor for window sensor", "SP3_Window", sp3forWindow, broadlinkBridge, 0, 0))
             .addDevice(new BroadlinkHub("Broadlink RM-PRO", "RMPRO", rmProMac, broadlinkBridge))
             .addDevice(new HarmonyHub("Logitech Harmony Elite", "Harmony", harmonyAddress, 100, connectToHub))
-            .addDevice(new PhilipsHueBridge("Philips Hue Bridge", "Hue", hueBridgeAddress, hueBridgeUserName))
+            .addDevice(new HueBridge("Philips Hue Bridge", "Hue", hueBridgeAddress, hueBridgeUserName))
             .addDevice(new AudioDevice("Hegel Amp", "H80", 30, true)
                                 .setPrefferredRemote(house.getDevice("RMPRO"))
                                 .addButton(new Button(4, "VolumeUp", "Volume Up").mapsTo(Button.Mapping.VOLUME_UP))

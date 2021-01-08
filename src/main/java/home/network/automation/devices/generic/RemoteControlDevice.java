@@ -1,4 +1,4 @@
-package home.network.automation.devices;
+package home.network.automation.devices.generic;
 
 
 import home.network.automation.devices.generic.Device;

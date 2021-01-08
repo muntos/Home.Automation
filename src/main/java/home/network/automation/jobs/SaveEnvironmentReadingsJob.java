@@ -5,7 +5,7 @@ import home.network.automation.devices.broadlink.A1Sensor.A1Response;
 import home.network.automation.devices.broadlink.A1Sensor.A1Sensor;
 import home.network.automation.entity.EnvironmentReading;
 import home.network.automation.model.Location;
-import home.network.automation.model.OpenWeatherMap.OpenWeatherMapNowResponse;
+import home.network.automation.model.openWeatherMap.OpenWeatherMapNowResponse;
 import home.network.automation.model.Sensor;
 import home.network.automation.observer.House;
 import home.network.automation.repository.EnvironmentReadingRepository;

@@ -1,4 +1,4 @@
-package home.network.automation.model.PhilipsHue;
+package home.network.automation.devices.broadlink.RMPlugin;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;

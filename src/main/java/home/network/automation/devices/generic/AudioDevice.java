@@ -1,5 +1,6 @@
-package home.network.automation.devices;
+package home.network.automation.devices.generic;
 
+import home.network.automation.devices.generic.RemoteControlledDevice;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,6 +1,6 @@
 package home.network.automation.service;
 
-import home.network.automation.devices.NetworkAudioDevice;
+import home.network.automation.devices.generic.NetworkAudioDevice;
 import home.network.automation.model.CommandResult;
 
 public interface CommandsService {

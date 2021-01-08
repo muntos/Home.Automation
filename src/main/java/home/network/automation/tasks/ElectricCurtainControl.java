@@ -2,8 +2,8 @@ package home.network.automation.tasks;
 
 import home.network.automation.components.Kodi;
 import home.network.automation.components.KodiListener;
-import home.network.automation.devices.ElectricCurtain;
-import home.network.automation.devices.RemoteControlledDevice;
+import home.network.automation.devices.generic.ElectricCurtain;
+import home.network.automation.devices.generic.RemoteControlledDevice;
 import home.network.automation.model.Button;
 import home.network.automation.observer.House;
 import home.network.automation.service.CommandsService;

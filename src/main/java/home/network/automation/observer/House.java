@@ -1,7 +1,8 @@
 package home.network.automation.observer;
 
-import home.network.automation.devices.*;
+import home.network.automation.devices.generic.AudioDevice;
 import home.network.automation.devices.generic.Device;
+import home.network.automation.devices.generic.RemoteControlDevice;
 
 import java.util.ArrayList;
 import java.util.Comparator;

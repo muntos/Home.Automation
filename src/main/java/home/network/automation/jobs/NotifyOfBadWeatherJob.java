@@ -1,12 +1,12 @@
 package home.network.automation.jobs;
 
-import home.network.automation.devices.NetworkAudioDevice;
-import home.network.automation.devices.PhilipsHueBridge;
+import home.network.automation.devices.generic.NetworkAudioDevice;
+import home.network.automation.devices.philips.HueBridge;
 import home.network.automation.devices.api.OpenWeatherMap;
 import home.network.automation.model.ForecastWeather;
-import home.network.automation.model.PhilipsHue.HueLightState;
-import home.network.automation.model.PhilipsHue.HueMotionSensor;
-import home.network.automation.model.PhilipsHue.HueSensor;
+import home.network.automation.model.philipsHue.HueLightState;
+import home.network.automation.model.philipsHue.HueMotionSensor;
+import home.network.automation.model.philipsHue.HueSensor;
 import home.network.automation.observer.House;
 import home.network.automation.service.CommandsService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class NotifyOfBadWeatherJob {
     @Autowired
     private CommandsService commandsService;
 
-    private PhilipsHueBridge bridge;
+    private HueBridge bridge;
 
     @Autowired
     public NotifyOfBadWeatherJob(House house) {

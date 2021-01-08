@@ -1,6 +1,6 @@
 package home.network.automation.devices.broadlink.A1Sensor;
 
-import home.network.automation.model.PhilipsHue.BroadlinkBridgeResponse;
+import home.network.automation.devices.broadlink.RMPlugin.BroadlinkBridgeResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;

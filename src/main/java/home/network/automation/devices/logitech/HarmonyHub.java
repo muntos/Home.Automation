@@ -1,8 +1,9 @@
-package home.network.automation.devices;
+package home.network.automation.devices.logitech;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import home.network.automation.devices.generic.RemoteControlDevice;
 import home.network.automation.model.Button;
 import home.network.automation.model.CommandResult;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import external.logitech.harmony.HarmonyClient;
 import external.logitech.harmony.HarmonyClientModule;
 
 @Slf4j
-public class HarmonyHub extends RemoteControlDevice{
+public class HarmonyHub extends RemoteControlDevice {
     @Getter
     @Inject
     private HarmonyClient harmonyClient;

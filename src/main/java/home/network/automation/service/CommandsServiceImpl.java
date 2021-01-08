@@ -1,9 +1,9 @@
 package home.network.automation.service;
 
-import home.network.automation.devices.AudioDevice;
-import home.network.automation.devices.NetworkAudioDevice;
-import home.network.automation.devices.RemoteControlDevice;
-import home.network.automation.devices.RemoteControlledDevice;
+import home.network.automation.devices.generic.AudioDevice;
+import home.network.automation.devices.generic.NetworkAudioDevice;
+import home.network.automation.devices.generic.RemoteControlDevice;
+import home.network.automation.devices.generic.RemoteControlledDevice;
 import home.network.automation.model.Button;
 import home.network.automation.model.CommandResult;
 import home.network.automation.observer.House;

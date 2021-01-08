@@ -1,4 +1,4 @@
-package home.network.automation.model.OpenWeatherMap;
+package home.network.automation.model.openWeatherMap;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;

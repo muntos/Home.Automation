@@ -4,7 +4,7 @@ import external.logitech.harmony.ActivityChangeListener;
 import external.logitech.harmony.ActivityStatusListener;
 import external.logitech.harmony.HarmonyClient;
 import external.logitech.harmony.config.Activity;
-import home.network.automation.devices.HarmonyHub;
+import home.network.automation.devices.logitech.HarmonyHub;
 import home.network.automation.devices.generic.SmartPlug;
 import home.network.automation.observer.House;
 import lombok.extern.slf4j.Slf4j;

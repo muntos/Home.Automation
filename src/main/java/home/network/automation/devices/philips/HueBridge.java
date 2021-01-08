@@ -1,4 +1,4 @@
-package home.network.automation.devices;
+package home.network.automation.devices.philips;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
@@ -6,12 +6,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import home.network.automation.devices.generic.Device;
-import home.network.automation.model.PhilipsHue.HueAmbientLightSensor;
-import home.network.automation.model.PhilipsHue.HueBridgeErrorResponse;
-import home.network.automation.model.PhilipsHue.HueLight;
-import home.network.automation.model.PhilipsHue.HueLightState;
-import home.network.automation.model.PhilipsHue.HueMotionSensor;
-import home.network.automation.model.PhilipsHue.HueSensor;
+import home.network.automation.model.philipsHue.HueAmbientLightSensor;
+import home.network.automation.model.philipsHue.HueBridgeErrorResponse;
+import home.network.automation.model.philipsHue.HueLight;
+import home.network.automation.model.philipsHue.HueLightState;
+import home.network.automation.model.philipsHue.HueMotionSensor;
+import home.network.automation.model.philipsHue.HueSensor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -35,7 +35,7 @@ import java.util.Map;
 
 @Slf4j
 @Getter
-public class PhilipsHueBridge extends Device {
+public class HueBridge extends Device {
     private static final String API_PATH = "api";
     private static final String LIGHTS_PATH = "lights";
     private static final String STATE_PATH = "state";
@@ -56,7 +56,7 @@ public class PhilipsHueBridge extends Device {
     private Integer port;
     private String user;
 
-    public PhilipsHueBridge(String name, String shortName, String protocol, String address, Integer port, String user) {
+    public HueBridge(String name, String shortName, String protocol, String address, Integer port, String user) {
         super(name, shortName);
         this.protocol = protocol;
         this.address = address;
@@ -64,7 +64,7 @@ public class PhilipsHueBridge extends Device {
         this.user = user;
     }
 
-    public PhilipsHueBridge(String name, String shortName, String address, String user) {
+    public HueBridge(String name, String shortName, String address, String user) {
         super(name, shortName);
         this.address = address;
         this.user = user;

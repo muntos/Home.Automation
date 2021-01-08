@@ -2,8 +2,8 @@ package home.network.automation.tasks;
 
 import home.network.automation.components.Kodi;
 import home.network.automation.components.KodiListener;
-import home.network.automation.devices.PhilipsHueBridge;
-import home.network.automation.model.PhilipsHue.HueLightState;
+import home.network.automation.devices.philips.HueBridge;
+import home.network.automation.model.philipsHue.HueLightState;
 import home.network.automation.observer.House;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class HueLightsControl implements KodiListener {
     }
 
     private void controlLivingRoomLights(Kodi.Event event){
-        PhilipsHueBridge bridge = house.getDevice("hue");
+        HueBridge bridge = house.getDevice("hue");
         switch (event){
             case PLAY_PAUSED:
                 HueLightState onState = new HueLightState();

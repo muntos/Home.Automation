@@ -1,7 +1,6 @@
-package home.network.automation.devices;
+package home.network.automation.devices.generic;
 
 
-import home.network.automation.devices.generic.Device;
 import home.network.automation.model.Button;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

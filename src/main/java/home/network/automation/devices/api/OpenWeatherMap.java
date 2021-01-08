@@ -1,10 +1,10 @@
 package home.network.automation.devices.api;
 
 import home.network.automation.model.*;
-import home.network.automation.model.OpenWeatherMap.OpenWeatherMapForecastList;
-import home.network.automation.model.OpenWeatherMap.OpenWeatherMapForecastResponse;
-import home.network.automation.model.OpenWeatherMap.OpenWeatherMapNowResponse;
-import home.network.automation.model.OpenWeatherMap.OpenWeatherMapWeather;
+import home.network.automation.model.openWeatherMap.OpenWeatherMapForecastList;
+import home.network.automation.model.openWeatherMap.OpenWeatherMapForecastResponse;
+import home.network.automation.model.openWeatherMap.OpenWeatherMapNowResponse;
+import home.network.automation.model.openWeatherMap.OpenWeatherMapWeather;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
