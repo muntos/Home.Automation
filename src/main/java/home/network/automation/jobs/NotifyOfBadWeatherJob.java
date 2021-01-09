@@ -1,5 +1,6 @@
 package home.network.automation.jobs;
 
+import home.network.automation.PhilipsHueLightsProps;
 import home.network.automation.devices.generic.NetworkAudioDevice;
 import home.network.automation.devices.philips.HueBridge;
 import home.network.automation.devices.api.OpenWeatherMap;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Profile({"prod", "dev"})
+@Profile({"prod"})
 @Slf4j
 @Component
 public class NotifyOfBadWeatherJob {
@@ -34,12 +35,15 @@ public class NotifyOfBadWeatherJob {
     @Autowired
     private CommandsService commandsService;
 
+    @Autowired
+    private PhilipsHueLightsProps lightsProps;
+
+    @Autowired
     private HueBridge bridge;
 
     @Autowired
     public NotifyOfBadWeatherJob(House house) {
         this.house = house;
-        bridge = house.getDevice("hue");
     }
 
     @Scheduled(fixedDelay = 5000)
@@ -57,12 +61,11 @@ public class NotifyOfBadWeatherJob {
         }
     }
 
-    //@Scheduled(fixedDelay = 5000)
+    //@Scheduled(fixedDelay = 50000)
     private void test() {
         NetworkAudioDevice networkAudioDevice = house.getDevice("X4500H");
         commandsService.telnetConnect(networkAudioDevice);
         int x = 1;
-
     }
 
     private void flashHallwayStrip() {
@@ -71,7 +74,7 @@ public class NotifyOfBadWeatherJob {
         onState.setBrightness(80);
         onState.setXy(new Float[] {0.675f,0.322f});
         onState.setAlert("lselect");
-        bridge.setLight(9, onState);
+        lightsProps.getBadWeatherNotify().stream().forEach(name -> bridge.setLight(name, onState));
     }
 
 }

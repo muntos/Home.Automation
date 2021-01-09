@@ -14,6 +14,20 @@ philips:
     bridge:
         address: 192.168.1.169
         username: nJCp1QzRfxjkJ2GKVJYbBo0PRyQVZ5S5rTCq23Ot
+    lights:
+        livingroom:
+            - lightstrip_livingroom_1
+            - lightstrip_livingroom_2
+            - hue_color_livingroom_1
+            - hue_color_livingroom_2
+            - hue_color_livingroom_3
+        hallway:
+            - lightstrip_hallway
+        multimediaControl:
+            - lightstrip_livingroom_1
+            - lightstrip_livingroom_2
+        badWeatherNotify:
+            - lightstrip_hallway
 
 tp-link:
     tapo:

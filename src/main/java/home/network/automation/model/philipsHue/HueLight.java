@@ -10,6 +10,8 @@ import lombok.Setter;
 public class HueLight {
     @Setter
     private HueLightState state;
+    @Setter
+    private Integer id;
     private String type;
     private String name;
 

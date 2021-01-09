@@ -1,6 +1,7 @@
 package home.network.automation;
 
 import home.network.automation.devices.api.BroadlinkBridge;
+import home.network.automation.devices.api.HueApiClient;
 import home.network.automation.devices.broadlink.A1Sensor.A1Sensor;
 import home.network.automation.devices.broadlink.A1Sensor.A1SensorLegacy;
 import home.network.automation.devices.broadlink.RmProHub.BroadlinkHub;
@@ -15,6 +16,7 @@ import home.network.automation.devices.tplink.TapoLogin;
 import home.network.automation.devices.tplink.TapoP100Plug;
 import home.network.automation.model.Button;
 import home.network.automation.observer.House;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,12 +47,6 @@ public class Config {
     @Value("${logitech.harmony.connect:false}")
     private Boolean connectToHub;
 
-    @Value("${philips.bridge.address}")
-    private String hueBridgeAddress;
-
-    @Value("${philips.bridge.username}")
-    private String hueBridgeUserName;
-
     @Value("${broadlink.a1.module1.mac}")
     private String a1Module1MacAddress;
 
@@ -67,7 +63,18 @@ public class Config {
     private String tapoLoginPassword;
 
     @Bean
-    House house(){
+    HueBridge hueBridge(@Autowired HueApiClient hueApiClient) {
+        return new HueBridge("Philips Hue Bridge", "Hue", hueApiClient);
+    }
+
+    @Bean
+    HueApiClient hueApiClient(@Value("${philips.bridge.address}") String hueBridgeAddress, @Value("${philips.bridge.username}") String hueBridgeUserName) {
+        return new HueApiClient("http", hueBridgeAddress, 80, hueBridgeUserName);
+    }
+
+    @Bean
+    House house(@Autowired HueBridge hueBridge) {
+
         BroadlinkBridge broadlinkBridge = new BroadlinkBridge(rmBridgeProtocol, rmBridgeAddress, rmBridgePort);
         House house = new House();
         house
@@ -75,7 +82,7 @@ public class Config {
             .addDevice(new SP3PlugLegacy("Broadlink SP3 mini martor for window sensor", "SP3_Window", sp3forWindow, broadlinkBridge, 0, 0))
             .addDevice(new BroadlinkHub("Broadlink RM-PRO", "RMPRO", rmProMac, broadlinkBridge))
             .addDevice(new HarmonyHub("Logitech Harmony Elite", "Harmony", harmonyAddress, 100, connectToHub))
-            .addDevice(new HueBridge("Philips Hue Bridge", "Hue", hueBridgeAddress, hueBridgeUserName))
+            .addDevice(hueBridge)
             .addDevice(new AudioDevice("Hegel Amp", "H80", 30, true)
                                 .setPrefferredRemote(house.getDevice("RMPRO"))
                                 .addButton(new Button(4, "VolumeUp", "Volume Up").mapsTo(Button.Mapping.VOLUME_UP))

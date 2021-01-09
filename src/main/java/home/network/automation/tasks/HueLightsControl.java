@@ -1,10 +1,10 @@
 package home.network.automation.tasks;
 
+import home.network.automation.PhilipsHueLightsProps;
 import home.network.automation.components.Kodi;
 import home.network.automation.components.KodiListener;
 import home.network.automation.devices.philips.HueBridge;
 import home.network.automation.model.philipsHue.HueLightState;
-import home.network.automation.observer.House;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,10 @@ public class HueLightsControl implements KodiListener {
     private Kodi kodi;
 
     @Autowired
-    private House house;
+    private PhilipsHueLightsProps lightsProps;
+
+    @Autowired
+    private HueBridge bridge;
 
     @PostConstruct
     public void init(){
@@ -33,24 +36,29 @@ public class HueLightsControl implements KodiListener {
     }
 
     private void controlLivingRoomLights(Kodi.Event event){
-        HueBridge bridge = house.getDevice("hue");
         switch (event){
             case PLAY_PAUSED:
-                HueLightState onState = new HueLightState();
-                onState.setOn(true);
-                onState.setBrightness(80);
-                onState.setHue(0);
-                onState.setSaturation(0);
-                bridge.setLight(1, onState);
-                bridge.setLight(2, onState);
+                lightsProps.getMultimediaControl().stream().forEach(name -> bridge.setLight(name, getHueLightStateForPlayPaused()));
                 break;
             case PLAY_STARTED:
             case PLAY_RESUMED:
                 HueLightState offState = new HueLightState();
                 offState.setOn(false);
-                bridge.setLight(1, offState);
-                bridge.setLight(2, offState);
+                lightsProps.getMultimediaControl().stream().forEach(name -> bridge.setLight(name, offState));
                 break;
         }
     }
+
+    private HueLightState getHueLightStateForPlayPaused() {
+        HueLightState onState = new HueLightState();
+        onState.setOn(true);
+        onState.setBrightness(183);
+        onState.setHue(46012);
+        onState.setSaturation(254);
+        onState.setXy(new Float[] {0.154f, 0.0807f});
+        onState.setCt(153);
+
+        return onState;
+    }
+
 }
