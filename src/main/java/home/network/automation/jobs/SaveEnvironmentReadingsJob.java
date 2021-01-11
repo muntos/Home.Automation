@@ -5,9 +5,8 @@ import home.network.automation.devices.broadlink.A1Sensor.A1Response;
 import home.network.automation.devices.broadlink.A1Sensor.A1Sensor;
 import home.network.automation.entity.EnvironmentReading;
 import home.network.automation.model.Location;
-import home.network.automation.model.openWeatherMap.OpenWeatherMapNowResponse;
 import home.network.automation.model.Sensor;
-import home.network.automation.observer.House;
+import home.network.automation.model.openWeatherMap.OpenWeatherMapNowResponse;
 import home.network.automation.repository.EnvironmentReadingRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,6 @@ import java.util.Optional;
 @Slf4j
 @Component
 public class SaveEnvironmentReadingsJob {
-    @Autowired
-    private House house;
 
     @Autowired
     private OpenWeatherMap openWeatherMap;
@@ -31,9 +28,11 @@ public class SaveEnvironmentReadingsJob {
     @Autowired
     private EnvironmentReadingRepository environmentReadingRepository;
 
+    @Autowired
+    A1Sensor a1Sensor;
+
     @Scheduled(fixedDelay = 3600000)
     public void doJob(){
-        A1Sensor a1Sensor = house.getDevice("A1Kitchen");
         Date now = new Date();
 
         Optional<A1Response> a1SensorResponse = a1Sensor.getReadings();

@@ -34,6 +34,16 @@ tp-link:
         login:
             username: alex.munteanu@gmail.com
             password: v8aD364VM6XWY_W
+        plugs:
+            P100:
+                module1:
+                    address: 192.168.1.110
+                module2:
+                    address: 192.168.1.111
+                module3:
+                    address: 192.168.1.73
+                module4:
+                    address: 192.168.1.71
 
 broadlink:
     a1:
@@ -59,7 +69,7 @@ hegel:
 
 denon:
     X4500H:
-        server: 192.168.1.146
+        address: 192.168.1.146
 
 logitech:
     harmony:

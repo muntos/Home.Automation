@@ -16,8 +16,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class CommandsServiceImpl implements CommandsService {
+
     @Autowired
     private House house;
+
     @Autowired
     private SmartPlugControl smartPlugControl;
 
@@ -86,13 +88,13 @@ public class CommandsServiceImpl implements CommandsService {
     @Override
     public void turnOnLogitechMediaServer() {
         log.info("Received Turn on command from LMS");
-        smartPlugControl.controlH80Plug(Activity.Status.ACTIVITY_IS_STARTING);
+        smartPlugControl.controlPlugs(Activity.Status.ACTIVITY_IS_STARTING);
     }
 
     @Override
     public void turnOffLogitechMediaServer() {
         log.info("Received Turn off command from LMS");
-        smartPlugControl.controlH80Plug(Activity.Status.HUB_IS_TURNING_OFF);
+        smartPlugControl.controlPlugs(Activity.Status.HUB_IS_TURNING_OFF);
     }
 
     @Override

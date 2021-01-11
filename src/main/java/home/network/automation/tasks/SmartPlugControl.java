@@ -5,10 +5,10 @@ import external.logitech.harmony.ActivityStatusListener;
 import external.logitech.harmony.HarmonyClient;
 import external.logitech.harmony.config.Activity;
 import home.network.automation.devices.logitech.HarmonyHub;
-import home.network.automation.devices.generic.SmartPlug;
-import home.network.automation.observer.House;
+import home.network.automation.devices.tplink.TapoP100Plug;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -23,12 +23,20 @@ public class SmartPlugControl {
     private HarmonyClient harmonyClient;
 
     @Autowired
-    private House house;
+    private HarmonyHub harmonyHub;
+
+    @Autowired
+    @Qualifier("P100_H80")
+    private TapoP100Plug p100_H80;
+
+    @Autowired
+    @Qualifier("P100_Rack_Vents_12V")
+    private TapoP100Plug p100_12V;
 
     @PostConstruct
     public void init(){
         try {
-            harmonyClient = ((HarmonyHub)house.getDevice("Harmony")).getHarmonyClient();
+            harmonyClient = harmonyHub.getHarmonyClient();
             harmonyClient.addListener(new ActivityChangeListener() {
                 @Override
                 public void activityStarted(Activity activity) {
@@ -49,23 +57,19 @@ public class SmartPlugControl {
     }
 
     private void processActivityEvents(Activity.Status status){
-        controlH80Plug(status);
+        controlPlugs(status);
     }
 
-    public void controlH80Plug(Activity.Status status){
-        SmartPlug tapoP100Plug = house.getDevice("P100_H80");
-
-        if (tapoP100Plug == null){
-            log.error("Could not find any smart plug named '{}', check your configuration!", "P100_H80");
-            return;
-        }
+    public void controlPlugs(Activity.Status status){
 
         switch (status){
             case ACTIVITY_IS_STARTING:
-                tapoP100Plug.setStatusWithScheduler(ON);
+                p100_H80.setStatusWithScheduler(ON);
+                p100_12V.setStatusWithScheduler(ON);
                 break;
             case HUB_IS_TURNING_OFF:
-                tapoP100Plug.setStatusWithScheduler(OFF);
+                p100_H80.setStatusWithScheduler(OFF);
+                p100_12V.setStatusWithScheduler(OFF);
                 break;
         }
     }
