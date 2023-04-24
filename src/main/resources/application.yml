@@ -93,7 +93,7 @@ spring:
     datasource:
         driver-class-name: org.mariadb.jdbc.Driver
         password: Home_solaris987
-        url: jdbc:mariadb://192.168.1.100:3306/home_automation
+        url: jdbc:mariadb://192.168.1.102:3306/home_automation
         username: home
         jpa:
             hibernate:
