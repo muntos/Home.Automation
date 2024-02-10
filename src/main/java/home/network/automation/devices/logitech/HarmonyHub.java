@@ -1,20 +1,19 @@
 package home.network.automation.devices.logitech;
 
 import com.google.inject.Guice;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
+import external.logitech.harmony.HarmonyClient;
+import external.logitech.harmony.HarmonyClientModule;
 import home.network.automation.devices.generic.RemoteControlDevice;
 import home.network.automation.model.Button;
 import home.network.automation.model.CommandResult;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import external.logitech.harmony.HarmonyClient;
-import external.logitech.harmony.HarmonyClientModule;
 
 @Slf4j
 public class HarmonyHub extends RemoteControlDevice {
     @Getter
-    @Inject
+    //@Inject
     private HarmonyClient harmonyClient;
 
     @Getter
@@ -35,6 +34,7 @@ public class HarmonyHub extends RemoteControlDevice {
         this.address = address;
         canSendIR = true;
         setPriority(priority);
+        this.harmonyClient = HarmonyClient.getInstance();
         if (connect) {
             connect();
         }

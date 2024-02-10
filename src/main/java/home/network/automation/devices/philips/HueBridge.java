@@ -45,6 +45,17 @@ public class HueBridge extends Device {
         return hueApiClient.get(path, HueLight.class);
     }
 
+    public HueLight getLight(String name) {
+        log.debug("Get light status for name={}", name);
+        HueLight light = getLights().get(name);
+        if (light == null) {
+            log.error("Couldn't find light named '{}' in Hue Bridge lights!", name);
+            return null;
+        }
+        String path = LIGHTS_PATH + "/" + light.getId();
+        return hueApiClient.get(path, HueLight.class);
+    }
+
     public Map<String, HueLight> getLights() {
         if (lights != null) {
             return lights;

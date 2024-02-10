@@ -5,6 +5,7 @@ import external.logitech.harmony.ActivityStatusListener;
 import external.logitech.harmony.HarmonyClient;
 import external.logitech.harmony.config.Activity;
 import home.network.automation.devices.logitech.HarmonyHub;
+import home.network.automation.devices.philips.HueSmartPlug;
 import home.network.automation.devices.tplink.TapoP100Plug;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,13 @@ public class SmartPlugControl {
     @Qualifier("P100_Rack_Vents_12V")
     private TapoP100Plug p100_12V;
 
+    @Autowired
+    @Qualifier("Hue_Rack_Vents_12V")
+    private HueSmartPlug hue12V;
+
+    @Autowired
+    @Qualifier("Hue_Hegel_H80")
+    private HueSmartPlug hueHegelH80;
     @PostConstruct
     public void init(){
         try {
@@ -64,12 +72,16 @@ public class SmartPlugControl {
 
         switch (status){
             case ACTIVITY_IS_STARTING:
-                p100_H80.setStatusWithScheduler(ON);
-                p100_12V.setStatusWithScheduler(ON);
+                //p100_H80.setStatusWithScheduler(ON);
+                //p100_12V.setStatusWithScheduler(ON);
+                hueHegelH80.setStatusWithScheduler(ON);
+                hue12V.setStatusWithScheduler(ON);
                 break;
             case HUB_IS_TURNING_OFF:
-                p100_H80.setStatusWithScheduler(OFF);
-                p100_12V.setStatusWithScheduler(OFF);
+                //p100_H80.setStatusWithScheduler(OFF);
+                //p100_12V.setStatusWithScheduler(OFF);
+                hueHegelH80.setStatusWithScheduler(OFF);
+                hue12V.setStatusWithScheduler(OFF);
                 break;
         }
     }

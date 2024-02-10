@@ -12,6 +12,7 @@ import home.network.automation.devices.generic.NetworkAudioDevice;
 import home.network.automation.devices.generic.RemoteControlledDevice;
 import home.network.automation.devices.logitech.HarmonyHub;
 import home.network.automation.devices.philips.HueBridge;
+import home.network.automation.devices.philips.HueSmartPlug;
 import home.network.automation.devices.tplink.TapoLogin;
 import home.network.automation.devices.tplink.TapoP100Plug;
 import home.network.automation.model.Button;
@@ -86,6 +87,16 @@ public class Config {
                                      @Value("${tp-link.tapo.login.password}") String tapoLoginPassword,
                                      @Value("${tp-link.tapo.plugs.P100.module4.address}") String ipAddress) {
         return new TapoP100Plug("Tapo P100 connected to kitchen rack vents 6V", "P100_Rack_Vents_6V", ipAddress, new TapoLogin(tapoLoginUsername, tapoLoginPassword), 60, 0);
+    }
+
+    @Bean(name = "Hue_Rack_Vents_12V")
+    HueSmartPlug huePlugVents12V(@Autowired HueBridge hueBridge) {
+        return new HueSmartPlug("Hue Plug connected to kitchen rack vents 12V", "Vents_12V", 60, 0, hueBridge);
+    }
+
+    @Bean(name = "Hue_Hegel_H80")
+    HueSmartPlug huePlugHegelH80(@Autowired HueBridge hueBridge) {
+        return new HueSmartPlug("Hue Plug connected to Hegel H80", "Hegel_H80", 60, 60, hueBridge);
     }
 
     @Bean
