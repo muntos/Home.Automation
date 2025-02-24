@@ -5,7 +5,7 @@
 
 	<groupId>home.network</groupId>
 	<artifactId>house.automation</artifactId>
-	<version>0.6.6</version>
+	<version>0.8.1</version>
 	<packaging>jar</packaging>
 
 	<name>Home Automation</name>
@@ -218,7 +218,7 @@
 			</plugin>
 
 
-            <plugin>
+            <!--<plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>1.4.13</version>
@@ -235,14 +235,38 @@
                         <phase>install</phase>
                         <goals>
                             <goal>build</goal>
-                            <!--<goal>push</goal>-->
+                            &lt;!&ndash;<goal>push</goal>&ndash;&gt;
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>-->
+
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.45.1</version>
+                <configuration>
+                    <images>
+                        <image>
+                            <!-- Replace your-project-name -->
+                            <name>muntos/house.automation:${project.version}</name>
+
+                        </image>
+                    </images>
+
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>build</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>build</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
 
-
-		</plugins>
+        </plugins>
         <finalName>my-home-automation</finalName>
 	</build>
 

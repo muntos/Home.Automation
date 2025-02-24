@@ -1,5 +1,5 @@
 # Start with a base image containing Java runtime
-FROM openjdk:11-jdk-slim
+FROM --platform=linux/amd64 openjdk:11-jdk-slim
 
 # Make port 88888 available to the world outside this container
 EXPOSE 8888
