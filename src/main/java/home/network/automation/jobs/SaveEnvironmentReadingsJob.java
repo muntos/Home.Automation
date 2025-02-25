@@ -31,7 +31,7 @@ public class SaveEnvironmentReadingsJob {
     @Autowired
     A1Sensor a1Sensor;
 
-    @Scheduled(fixedDelay = 3600000)
+    //@Scheduled(fixedDelay = 3600000)
     public void doJob(){
         Date now = new Date();
 
